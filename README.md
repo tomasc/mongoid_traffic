@@ -32,14 +32,6 @@ Log your traffic like this:
 Mongoid::TrafficLogger.log
 ```
 
-Or, in case of Rails, you can use the `.after_action` macro with the `#log_traffic` helper method in your controllers:
-
-```Ruby
-class MyController < ApplicationController
-	after_action :log_traffic, only: [:show]
-end
-```
-
 ### Scope
 
 You can scope the log using the (optional) `scope:` argument:
@@ -48,7 +40,33 @@ You can scope the log using the (optional) `scope:` argument:
 Mongoid::TrafficLogger.log(scope: '/pages/123')
 ```
 
-Or, in case of Rails controller:
+### User Agent
+
+Optionally, you can pass 'User-Agent' header string to the logger:
+
+```Ruby
+Mongoid::TrafficLogger.log(user_agent: user_agent_string)
+```
+
+### Referer
+
+Optionally, you can pass 'User-Agent' header string to the logger:
+
+```Ruby
+Mongoid::TrafficLogger.log(referer: http_referer_string)
+```
+
+## Rails
+
+In case of Rails, you can use the `.after_action` macro with the `#log_traffic` helper method in your controllers:
+
+```Ruby
+class MyController < ApplicationController
+	after_action :log_traffic, only: [:show]
+end
+```
+
+Eventually the `:log_scoped_traffic` method which scopes the log by the current request path (`/pages/123`):
 
 ```Ruby
 class MyController < ApplicationController
@@ -56,7 +74,7 @@ class MyController < ApplicationController
 end
 ```
 
-By default, the `:log_scoped_traffic` method scopes your log by the request path (for example '/pages/123'). You can override this behavior with custom scope like this:
+You can override this behavior with custom scope like this:
 
 ```Ruby
 class MyController < ApplicationController
@@ -77,22 +95,6 @@ class MyController < ApplicationController
 	after_action :log_traffic, only: [:show]
 	after_action :log_scoped_traffic, only: [:show]
 end
-```
-
-### User Agent
-
-Optionally, you can pass 'User-Agent' header string to the logger:
-
-```Ruby
-Mongoid::TrafficLogger.log(user_agent: user_agent_string)
-```
-
-### Referer
-
-Optionally, you can pass 'User-Agent' header string to the logger:
-
-```Ruby
-Mongoid::TrafficLogger.log(referer: http_referer_string)
 ```
 
 ## Accessing the log
