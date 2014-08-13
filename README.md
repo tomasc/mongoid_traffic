@@ -24,7 +24,7 @@ Log your traffic like this:
 
 	Mongoid::TrafficLogger.log('/pages/123', user_agent: user_agent_string, referer: referer_string)
 
-Or, in case of Rails, use the `after_action` macro in your controller:
+Or, in case of Rails, you can use the `after_action` macro in your controllers:
 
 	class MyController < ApplicationController
 		after_action :log_traffic, only: [:show]
