@@ -21,6 +21,7 @@ module MongoidTraffic
     end
 
     def log
+      return if Bots.is_a_bot?(@referer_string)
       %i(ym ymd).each do |ts|
         Log.collection.find( find_query(ts) ).upsert( upsert_query )
       end
@@ -46,7 +47,7 @@ module MongoidTraffic
 
     def referer_query
       return {} unless referer.present?
-      referer_key = escape_key(referer.host)
+      referer_key = escape_key(referer.to_s)
       { "r.#{referer_key}" => 1 }
     end
 

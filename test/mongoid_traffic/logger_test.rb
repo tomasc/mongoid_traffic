@@ -16,26 +16,31 @@ module MongoidTraffic
     describe 'ClassMethods' do
       describe '.log' do
 
-        describe 'when records for current date do not exist' do
-          before { Logger.log(scope: scope, user_agent: user_agent_string, referer: referer) }
+        before { Logger.log(scope: scope, user_agent: user_agent_string, referer: referer) }
 
-          it 'logs for year & month' do
-            Log.unscoped.for_year(year).for_month(month).must_be :exists?
-          end
-          it 'logs for date' do
-            Log.unscoped.for_date(date).must_be :exists?
-          end
-          it 'logs for scope' do
-            Log.unscoped.for_scope(scope).must_be :exists?
-          end
-          it 'logs access_count' do
-            Log.unscoped.first.access_count.must_equal 1
-          end
-          it 'logs user_agent' do
-            Log.unscoped.first.browsers.fetch('Macintosh').fetch('Safari').fetch('8%2E0').must_equal 1
-          end
-          it 'referer' do
-            Log.unscoped.first.referers.fetch('www%2Egoogle%2Ecom').must_equal 1
+        it 'logs for year & month' do
+          Log.unscoped.for_year(year).for_month(month).must_be :exists?
+        end
+        it 'logs for date' do
+          Log.unscoped.for_date(date).must_be :exists?
+        end
+        it 'logs for scope' do
+          Log.unscoped.for_scope(scope).must_be :exists?
+        end
+        it 'logs access_count' do
+          Log.unscoped.first.access_count.must_equal 1
+        end
+        it 'logs user_agent' do
+          Log.unscoped.first.browsers.fetch('Macintosh').fetch('Safari').fetch('8%2E0').must_equal 1
+        end
+        it 'referer' do
+          Log.unscoped.first.referers.fetch('http%3A%2F%2Fwww%2Egoogle%2Ecom').must_equal 1
+        end
+
+        describe 'when referer a bot' do
+          let(:referer) { 'Googlebot/Test ( http://www.googlebot.com/bot.html)' }
+          it 'does not create log' do
+            Log.unscoped.wont_be :exists?
           end
         end
         

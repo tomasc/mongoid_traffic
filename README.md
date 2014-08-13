@@ -42,7 +42,7 @@ Mongoid::TrafficLogger.log(scope: '/pages/123')
 
 ### User Agent
 
-Optionally, you can pass 'User-Agent' header string to the logger:
+Optionally, you can pass 'User-Agent' string to the logger:
 
 ```Ruby
 Mongoid::TrafficLogger.log(user_agent: user_agent_string)
@@ -50,11 +50,13 @@ Mongoid::TrafficLogger.log(user_agent: user_agent_string)
 
 ### Referer
 
-Optionally, you can pass 'User-Agent' header string to the logger:
+Optionally, you can pass 'Referer' string to the logger:
 
 ```Ruby
 Mongoid::TrafficLogger.log(referer: http_referer_string)
 ```
+
+If the referer is included in the [bot list](http://www.user-agents.org/allagents.xml) the log will not be created.
 
 ## Rails
 
