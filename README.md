@@ -68,6 +68,8 @@ The total number of views per `record_id` like this:
 
 ### Referer
 
+## Customization
+
 ## Contributing
 
 1. Fork it ( https://github.com/tomasc/mongoid_traffic/fork )
