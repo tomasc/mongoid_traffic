@@ -83,7 +83,7 @@ class MyController < ApplicationController
 	private
 	
 	def log_scoped_traffic
-		super.log_scoped_traffic(scope: 'my-scope-comes-here')
+		super scope: 'my-scope-comes-here'
 	end
 end
 ```
