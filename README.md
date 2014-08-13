@@ -18,6 +18,18 @@ Or install it yourself as:
 
 	$ gem install mongoid_traffic
 
+## Basic Usage
+
+Log your traffic like this:
+
+	Mongoid::TrafficLogger.log('/pages/123', user_agent: user_agent_string, referer: referer_string)
+
+Or, in case of Rails, use the `after_action` macro in your controller:
+
+	class MyController < ApplicationController
+		after_action :log_traffic, only: [:show]
+	end
+
 ## Classes
 
 This gem consists of two basic classes: `MongoidTraffic::Logger` and `MongoidTraffic::Log`. The `Logger` takes care of upserting data in to the db using atomic updates, while the `Log` class is a `Mongoid::Document` class that wraps the records into neat models with scopes and helper methods for querying the log.
