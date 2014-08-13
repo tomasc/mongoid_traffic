@@ -20,8 +20,8 @@ module MongoidTraffic
         subject.must_respond_to :day
       end
 
-      it 'has :property' do
-        subject.must_respond_to :property
+      it 'has :scope' do
+        subject.must_respond_to :scope
       end
 
       it 'has :access_count' do

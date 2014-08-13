@@ -9,7 +9,7 @@ module MongoidTraffic
     field :m, as: :month, type: Integer
     field :d, as: :day, type: Integer
     
-    field :p, as: :property, type: String
+    field :s, as: :scope, type: String
 
     field :ac, as: :access_count, type: Integer
     field :b, as: :browsers, type: Hash, default: {}
@@ -22,9 +22,9 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
     
-    default_scope -> { where(property: nil, year: Date.today.year, month: nil, day: nil) }
+    default_scope -> { where(scope: nil, year: Date.today.year, month: nil, day: nil) }
 
-    scope :for_property, -> property { where(property: property) }
+    scope :for_scope, -> scope { where(scope: scope) }
 
     scope :for_year, -> year { where(year: year) }
     scope :for_month, -> month { where(month: month) }

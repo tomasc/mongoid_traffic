@@ -11,16 +11,17 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
 
-    def initialize property, options={}
-      @property = property
-      @options = options
+    def initialize scope: nil, user_agent: nil, referer: nil
+      @scope = scope
+      @user_agent_string = user_agent
+      @referer = referer
     end
 
     def log
 
       %i(y ym ymd).each do |scope|
         Log.collection.find(time_query(scope)).upsert(upsert_query)
-        Log.collection.find(property_query.merge(time_query(scope))).upsert(upsert_query)
+        Log.collection.find(scope_query.merge(time_query(scope))).upsert(upsert_query)
       end
     end
 
@@ -50,13 +51,12 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
 
-    def property_query
-      { p: @property }
+    def scope_query
+      { p: @scope }
     end
 
     def time_query scope
       case scope
-      when :y then { y: Date.today.year, m: nil, d: nil }
       when :ym then { y: Date.today.year, m: Date.today.month, d: nil }
       when :ymd then { y: Date.today.year, m: Date.today.month, d: Date.today.day }
       end
@@ -65,7 +65,7 @@ module MongoidTraffic
     private # =============================================================
     
     def user_agent
-      @user_agent ||= ::UserAgent.parse(@options[:user_agent])
+      @user_agent ||= ::UserAgent.parse(@user_agent_string)
     end
 
   end

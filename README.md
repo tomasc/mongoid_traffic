@@ -18,57 +18,54 @@ Or install it yourself as:
 
 	$ gem install mongoid_traffic
 
-## Basic Usage
+## Usage
 
 Log your traffic like this:
 
-	Mongoid::TrafficLogger.log('/pages/123', user_agent: user_agent_string, referer: referer_string)
+	Mongoid::TrafficLogger.log()
 
-Or, in case of Rails, you can use the `after_action` macro in your controllers:
+Or, in case of Rails, you can use the `.after_action` macro with the `#log_traffic` helper method in your controllers:
 
 	class MyController < ApplicationController
 		after_action :log_traffic, only: [:show]
+	end
+
+### Scope
+
+You can scope the log using the (optional) `scope:` argument:
+
+	Mongoid::TrafficLogger.log(scope: '/pages/123')
+
+Or, in case of Rails controller:
+
+	class MyController < ApplicationController
+		after_action :log_scoped_traffic, only: [:show]
+	end
+
+By default, the `:log_scoped_traffic` method scopes your log by the request path (for example '/pages/123'). You can override this with your scope like this:
+
+	class MyController < ApplicationController
+		after_action { |c| c.log_scoped_traffic(scope: 'my-scope-comes-here') }, only: [:show]
+	end
+
+It might be good idea to use both methods in order to log access to the whole site as well as access to individual pages:
+
+	class MyController < ApplicationController
+		after_action :log_traffic, only: [:show]
+		after_action :log_scoped_traffic, only: [:show]
 	end
 
 ## Accessing the log
 
 ### Access count
 
-The total number of views across all properties within a specific month can be accessed like this:
+The total number of views within a specific month can be accessed like this:
 
 	Mongoid::TrafficLog.for_year(2014).for_month(8).access_count
 
-The total number of views per property per specific date like this:
+The total number of views per scope per specific date like this:
 
-	Mongoid::TrafficLog.for_property('/pages/123').for_date(Date.today).access_count
-
-### User Agent
-
-### Referer
-
-## Classes
-
-This gem consists of two basic classes: `MongoidTraffic::Logger` and `MongoidTraffic::Log`. The `Logger` takes care of upserting data in to the db using atomic updates, while the `Log` class is a `Mongoid::Document` class that wraps the records into neat models with scopes and helper methods for querying the log.
-
-## Logging
-
-To log traffic:
-
-	Mongoid::TrafficLogger.log(property)
-
-Where `property` might be for example path of tracked view: `/pages/123`
-
-This will create/update the following Mongoid month in a year:
-
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(property): nil, ac(access_count): 1
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(property): /pages/123, ac(access_count): 1
-
-And for for specific date:
-
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13, rid(property): nil, ac(access_count): 1
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13, rid(property): /pages/123, ac(access_count): 1
-
-Always tracking access to a `property` as well as an access across all properties.
+	Mongoid::TrafficLog.for_date(Date.today).access_count
 
 ### User Agent
 
