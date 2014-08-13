@@ -6,10 +6,9 @@ module MongoidTraffic
   class Logger
     describe 'GeoIp' do
 
-      describe '.consume' do
-        it 'fetches the allagents.xml' do
-          skip 'to keep test fast'
-          GeoIp.consume.must_be :present?
+      describe '.country_code2' do
+        it 'returns country code' do
+          GeoIp.country_code2('github.com').must_equal 'US'
         end
       end
 

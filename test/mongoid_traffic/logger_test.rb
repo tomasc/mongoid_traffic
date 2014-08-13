@@ -12,11 +12,12 @@ module MongoidTraffic
     let(:scope) { 'foo/bar' }
     let(:user_agent_string) { 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/538.46 (KHTML, like Gecko) Version/8.0 Safari/538.46' }
     let(:referer) { 'http://www.google.com' }
+    let(:ip_address) { '88.198.50.152' }
 
     describe 'ClassMethods' do
       describe '.log' do
 
-        before { Logger.log(scope: scope, user_agent: user_agent_string, referer: referer) }
+        before { Logger.log(scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address) }
 
         it 'logs for year & month' do
           Log.unscoped.for_year(year).for_month(month).must_be :exists?
@@ -37,7 +38,7 @@ module MongoidTraffic
           Log.unscoped.first.referers.fetch('http%3A%2F%2Fwww%2Egoogle%2Ecom').must_equal 1
         end
         it 'logs country' do
-          Log.unscoped.first.countries.must_equal 'foo'
+          Log.unscoped.first.countries.fetch('DE').must_equal 1
         end
 
         describe 'when referer a bot' do

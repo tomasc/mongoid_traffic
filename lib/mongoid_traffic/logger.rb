@@ -15,10 +15,11 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
 
-    def initialize scope: nil, user_agent: nil, referer: nil
+    def initialize ip_address: nil, referer: nil, scope: nil, user_agent: nil 
+      @ip_address = ip_address
+      @referer_string = referer
       @scope = scope
       @user_agent_string = user_agent
-      @referer_string = referer
     end
 
     def log
@@ -51,7 +52,9 @@ module MongoidTraffic
     end
 
     def country_query
-      {}
+      return {} unless @ip_address.present?
+      return {} unless country_code2 = GeoIp.country_code2(@ip_address)
+      { "c.#{country_code2}" => 1 }
     end
 
     def referer_query

@@ -18,7 +18,7 @@ namespace :mongoid_traffic do
   desc "output the geoip.dat"
   task :update_geoip_data do
     `cd vendor/mongoid_traffic && curl -O #{MongoidTraffic::Logger::GeoIp::DATA_URL}`
-    `cd vendor/mongoid_traffic && gunzip GeoIP.dat.gz`
+    `cd vendor/mongoid_traffic && gunzip -f GeoIP.dat.gz`
   end
 
 end

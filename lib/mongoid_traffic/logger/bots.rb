@@ -1,5 +1,4 @@
 require 'nokogiri'
-require 'open-uri'
 
 # sourced from https://github.com/charlotte-ruby/impressionist/blob/master/lib/impressionist/bots.rb
 
