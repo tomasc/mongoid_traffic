@@ -91,11 +91,8 @@ Mongoid::TrafficLog.for_year(2014).for_month(8).access_count
 
 The total number of views per scope per specific date like this:
 
-<<<<<<< HEAD
-	Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').access_count
-=======
 ```Ruby
-Mongoid::TrafficLog.for_date(Date.today).access_count
+Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').access_count
 ```
 >>>>>>> FETCH_HEAD
 
