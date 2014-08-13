@@ -18,35 +18,55 @@ Or install it yourself as:
 
 	$ gem install mongoid_traffic
 
-## Usage
+## Classes
 
-Create your a Log class:
+This gem consists of two basic classes: `MongoidTraffic::Logger` and `MongoidTraffic::Log`. The `Logger` takes care of upserting data in to the db using atomic updates, while the `Log` class is a `Mongoid::Document` class that wraps the records into neat models with scopes and helper methods for querying the log.
 
-	class MyLogger < Mongoid::TrafficLogger
-	end
+## Logging
 
-Log traffic like this:
+To log traffic:
 
-	MyLogger.log
+	Mongoid::TrafficLogger.log(record_id)
+
+Where `record_id` might be for example path of tracked view: `/pages/123`
 
 This will create/update the following Mongoid records:
 
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(record_id): nil, ac(access_count): 1
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(record_id): /pages/123, ac(access_count): 1
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13, rid(record_id): /pages/123, ac(access_count): 1
 
-## User Agent
+The first one is a cache of all access per whole Log (for example per whole site), the next two are logs per record_id per month and per day.
 
-Optionally, you can pass 'User-Agent' header string to the logger:
-
-	MyLogger.log(user_agent: user_agent_string)
-
-## Referer
+### User Agent
 
 Optionally, you can pass 'User-Agent' header string to the logger:
 
-	MyLogger.log(referer: http_referer_string)
+	Mongoid::TrafficLogger.log(user_agent: user_agent_string)
 
-## Rails
+### Referer
+
+Optionally, you can pass 'User-Agent' header string to the logger:
+
+	Mongoid::TrafficLogger.log(referer: http_referer_string)
+
+### Rails
+
+## Accessing the log
+
+### Access count
+
+The total number of views in a specific month can be accessed like this:
+
+	Mongoid::TrafficLog.for_month(2014, 8).access_count
+
+The total number of views per `record_id` like this:
+
+	Mongoid::TrafficLog.for_record_id('/pages/123').for_month(2014, 8).access_count
+
+### User Agent
+
+### Referer
 
 ## Contributing
 

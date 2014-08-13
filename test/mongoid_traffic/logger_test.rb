@@ -9,10 +9,14 @@ module MongoidTraffic
       describe '.log' do
 
         describe 'when records for current date do not exist' do
-          before { Logger.log }
-          it 'creates them' do
-            Log.for_month(Date.today.year, Date.today.month).exists?.must_equal true
-            Log.for_date(Date.today).exists?.must_equal true
+          let(:record_id) { 'foo/bar' }
+          before { Logger.log(record_id) }
+
+          it 'creates Log for year & month' do
+            Log.for_record_id(record_id).for_month(Date.today.year, Date.today.month).where(access_count: 1).exists?.must_equal true
+          end
+          it 'creates Log for full date' do
+            Log.for_record_id(record_id).for_date(Date.today).where(access_count: 1).exists?.must_equal true
           end
         end
         

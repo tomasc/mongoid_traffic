@@ -20,14 +20,19 @@ module MongoidTraffic
         subject.must_respond_to :day
       end
 
+      it 'has :record_id' do
+        subject.must_respond_to :record_id
+      end
+
+      it 'has :access_count' do
+        subject.must_respond_to :access_count
+      end
+
       it 'has :browsers' do
         subject.must_respond_to :browsers
         subject.browsers.must_be_kind_of Hash
       end
 
-      it 'has :updated_at' do
-        subject.must_respond_to :updated_at
-      end
     end
 
   end

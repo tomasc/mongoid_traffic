@@ -4,19 +4,35 @@ module MongoidTraffic
   class Logger
 
     class << self
-      def log options={}
-        Log.collection.find(find_query(:m)).upsert(upsert_query)
-        Log.collection.find(find_query(:d)).upsert(upsert_query)
+
+      def log record_id, options={}
+        @record_id = record_id
+
+        %i(ym ymd).each do |scope|
+          Log.collection.find(find_query(scope)).upsert(upsert_query)
+        end
+      end
+
+      # ---------------------------------------------------------------------
+      
+      def access_count_query
+        { ac: 1 }
       end
 
       def upsert_query
-        { '$inc' => { ac: 1 } }
+        { '$inc' => access_count_query }
+      end
+
+      # ---------------------------------------------------------------------
+      
+      def record_id_query
+        { rid: @record_id }
       end
 
       def find_query scope
         case scope
-        when :m then { y: Date.today.year, m: Date.today.month, d: nil }
-        when :d then { y: Date.today.year, m: Date.today.month, d: Date.today.day }
+        when :ym then record_id_query.merge!({ y: Date.today.year, m: Date.today.month, d: nil })
+        when :ymd then record_id_query.merge!({ y: Date.today.year, m: Date.today.month, d: Date.today.day })
         end
       end
 
