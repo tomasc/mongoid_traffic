@@ -34,13 +34,12 @@ Or, in case of Rails, you can use the `after_action` macro in your controllers:
 
 ### Access count
 
-The total number of views in a specific month can be accessed like this:
+The total number of views across all properties within a specific month can be accessed like this:
 
-	Mongoid::TrafficLog.for_month(2014, 8).access_count
+	Mongoid::TrafficLog.for_all_properties.for_month(Date.today).access_count
 
-The total number of views per `property` like this:
+The total number of views per `property` per specific date like this:
 
-	Mongoid::TrafficLog.for_property('/pages/123').for_month(2014, 8).access_count
 	Mongoid::TrafficLog.for_property('/pages/123').for_date(Date.today).access_count
 
 ### User Agent
