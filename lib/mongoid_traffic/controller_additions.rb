@@ -4,7 +4,7 @@ module MongoidTraffic
     module ClassMethods
     end
 
-    def self.included(base)
+    def self.included base
       base.extend ClassMethods
       # base.helper_method :my_method if base.respond_to? :my_method
     end

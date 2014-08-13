@@ -8,17 +8,45 @@ Aggregated traffic logs stored in MongoDB. Based on the approach described by Jo
 
 Add this line to your application's Gemfile:
 
-    gem 'mongoid_traffic'
+  gem 'mongoid_traffic'
 
 And then execute:
 
-    $ bundle
+  $ bundle
 
 Or install it yourself as:
 
-    $ gem install mongoid_traffic
+  $ gem install mongoid_traffic
 
 ## Usage
+
+Create your a Log class:
+
+  class MyLogger < Mongoid::TrafficLogger
+  end
+
+Log traffic like this:
+
+  MyLog.log
+
+This will create/update the following records in the db:
+
+  MongoidTraffic::Log y: 2014, m: 8, d: nil
+  MongoidTraffic::Log y: 2014, m: 8, d: 13
+
+## User Agent
+
+Optionally, you can pass 'User-Agent' header string to the logger:
+
+  MyLogger.log(user_agent: user_agent_string)
+
+## Referer
+
+Optionally, you can pass 'User-Agent' header string to the logger:
+
+  MyLogger.log(referer: http_referer_string)
+
+## Rails
 
 ## Contributing
 
