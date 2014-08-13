@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = MongoidTraffic::VERSION
   spec.authors       = ["Tomas Celizna"]
   spec.email         = ["tomas.celizna@gmail.com"]
-  spec.description   = %q{Simple traffic logging.}
-  spec.summary       = %q{Simple traffic logging.}
+  spec.description   = %q{Aggregated traffic logs stored in MongoDB.}
+  spec.summary       = %q{Aggregated traffic logs stored in MongoDB.}
   spec.homepage      = "https://github.com/tomasc/mongoid_traffic"
   spec.license       = "MIT"
 
