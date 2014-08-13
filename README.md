@@ -38,9 +38,9 @@ The total number of views in a specific month can be accessed like this:
 
 	Mongoid::TrafficLog.for_month(2014, 8).access_count
 
-The total number of views per `record_id` like this:
+The total number of views per `property` like this:
 
-	Mongoid::TrafficLog.for_record_id('/pages/123').for_month(2014, 8).access_count
+	Mongoid::TrafficLog.for_property('/pages/123').for_month(2014, 8).access_count
 
 ### User Agent
 
@@ -54,17 +54,17 @@ This gem consists of two basic classes: `MongoidTraffic::Logger` and `MongoidTra
 
 To log traffic:
 
-	Mongoid::TrafficLogger.log(record_id)
+	Mongoid::TrafficLogger.log(property)
 
-Where `record_id` might be for example path of tracked view: `/pages/123`
+Where `property` might be for example path of tracked view: `/pages/123`
 
 This will create/update the following Mongoid records:
 
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(record_id): nil, ac(access_count): 1
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(record_id): /pages/123, ac(access_count): 1
-	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13, rid(record_id): /pages/123, ac(access_count): 1
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(property): nil, ac(access_count): 1
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(property): /pages/123, ac(access_count): 1
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13, rid(property): /pages/123, ac(access_count): 1
 
-The first one is a cache of all access per whole Log (for example per whole site), the next two are logs per record_id per month and per day.
+The first one is a cache of all access per whole Log (for example per whole site), the next two are logs per property per month and per day.
 
 ### User Agent
 

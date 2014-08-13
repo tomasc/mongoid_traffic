@@ -5,8 +5,8 @@ module MongoidTraffic
 
     class << self
 
-      def log record_id, options={}
-        @record_id = record_id
+      def log property, options={}
+        @property = property
 
         %i(ym ymd).each do |scope|
           Log.collection.find(find_query(scope)).upsert(upsert_query)
@@ -25,14 +25,14 @@ module MongoidTraffic
 
       # ---------------------------------------------------------------------
       
-      def record_id_query
-        { rid: @record_id }
+      def property_query
+        { p: @property }
       end
 
       def find_query scope
         case scope
-        when :ym then record_id_query.merge!({ y: Date.today.year, m: Date.today.month, d: nil })
-        when :ymd then record_id_query.merge!({ y: Date.today.year, m: Date.today.month, d: Date.today.day })
+        when :ym then property_query.merge!({ y: Date.today.year, m: Date.today.month, d: nil })
+        when :ymd then property_query.merge!({ y: Date.today.year, m: Date.today.month, d: Date.today.day })
         end
       end
 
