@@ -59,13 +59,17 @@ To log traffic:
 
 Where `property` might be for example path of tracked view: `/pages/123`
 
-This will create/update the following Mongoid records:
+This will create/update the following Mongoid month in a year:
 
 	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(property): nil, ac(access_count): 1
 	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil, rid(property): /pages/123, ac(access_count): 1
+
+And for for specific date:
+
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13, rid(property): nil, ac(access_count): 1
 	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13, rid(property): /pages/123, ac(access_count): 1
 
-The first one is a cache of all access per whole Log (for example per whole site), the next two are logs per property per month and per day.
+Always tracking access to a `property` as well as an access across all properties.
 
 ### User Agent
 
@@ -78,10 +82,6 @@ Optionally, you can pass 'User-Agent' header string to the logger:
 Optionally, you can pass 'User-Agent' header string to the logger:
 
 	Mongoid::TrafficLogger.log(referer: http_referer_string)
-
-### Rails
-
-## Customization
 
 ## Contributing
 

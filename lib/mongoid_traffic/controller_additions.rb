@@ -3,7 +3,6 @@ module MongoidTraffic
 
     module ClassMethods
       def log_traffic
-        
       end
     end
 
