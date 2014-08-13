@@ -1,3 +1,4 @@
+require 'geoip'
 require 'uri'
 require 'useragent'
 
@@ -30,7 +31,11 @@ module MongoidTraffic
     # ---------------------------------------------------------------------
 
     def upsert_query
-      { '$inc' => access_count_query.merge(browser_query).merge(referer_query) }
+      { '$inc' => access_count_query.
+          merge(browser_query).
+          merge(country_query).
+          merge(referer_query)
+      }
     end
 
     # ---------------------------------------------------------------------
@@ -43,6 +48,10 @@ module MongoidTraffic
       return {} unless browser.present?
       browser_path = [browser.platform, browser.name, browser.version].map{ |s| escape_key(s) }.join('.')
       { "b.#{browser_path}" => 1 }
+    end
+
+    def country_query
+      {}
     end
 
     def referer_query

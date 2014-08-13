@@ -33,8 +33,11 @@ module MongoidTraffic
         it 'logs user_agent' do
           Log.unscoped.first.browsers.fetch('Macintosh').fetch('Safari').fetch('8%2E0').must_equal 1
         end
-        it 'referer' do
+        it 'logs referer' do
           Log.unscoped.first.referers.fetch('http%3A%2F%2Fwww%2Egoogle%2Ecom').must_equal 1
+        end
+        it 'logs country' do
+          Log.unscoped.first.countries.must_equal 'foo'
         end
 
         describe 'when referer a bot' do

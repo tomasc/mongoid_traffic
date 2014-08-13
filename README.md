@@ -58,6 +58,8 @@ Mongoid::TrafficLogger.log(referer: http_referer_string)
 
 If the referer is included in the [bot list](http://www.user-agents.org/allagents.xml) the log will not be created.
 
+### Country
+
 ## Rails
 
 In case of Rails, you can use the `.after_action` macro with the `#log_traffic` helper method in your controllers:

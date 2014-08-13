@@ -13,6 +13,7 @@ module MongoidTraffic
 
     field :ac, as: :access_count, type: Integer
     field :b, as: :browsers, type: Hash, default: {}
+    field :c, as: :countries, type: Hash, default: {}
     field :r, as: :referers, type: Hash, default: {}
 
     # ---------------------------------------------------------------------
