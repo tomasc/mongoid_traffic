@@ -29,10 +29,10 @@ Log traffic like this:
 
 	MyLogger.log
 
-This will create/update the following records in the db:
+This will create/update the following Mongoid records:
 
-	MongoidTraffic::Log y: 2014, m: 8, d: nil
-	MongoidTraffic::Log y: 2014, m: 8, d: 13
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): nil
+	MongoidTraffic::Log y(year): 2014, m(month): 8, d(day): 13
 
 ## User Agent
 
