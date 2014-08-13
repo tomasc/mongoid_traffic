@@ -79,22 +79,6 @@ class MyController < ApplicationController
 end
 ```
 
-## Accessing the log
-
-### Access count
-
-The total number of views within a specific month can be accessed like this:
-
-```Ruby
-Mongoid::TrafficLog.for_year(2014).for_month(8).access_count
-```
-
-The total number of views per scope per specific date like this:
-
-```Ruby
-Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').access_count
-```
-
 ### User Agent
 
 Optionally, you can pass 'User-Agent' header string to the logger:
@@ -109,6 +93,22 @@ Optionally, you can pass 'User-Agent' header string to the logger:
 
 ```Ruby
 Mongoid::TrafficLogger.log(referer: http_referer_string)
+```
+
+## Accessing the log
+
+### Access count
+
+The total number of views within a specific month can be accessed like this:
+
+```Ruby
+Mongoid::TrafficLog.for_year(2014).for_month(8).access_count
+```
+
+The total number of views per scope per specific date like this:
+
+```Ruby
+Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').access_count
 ```
 
 ## Contributing
