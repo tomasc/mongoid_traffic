@@ -27,7 +27,7 @@ Create your a Log class:
 
 Log traffic like this:
 
-	MyLog.log
+	MyLogger.log
 
 This will create/update the following records in the db:
 
