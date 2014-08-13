@@ -22,7 +22,7 @@ Or install it yourself as:
 
 Log your traffic like this:
 
-	Mongoid::TrafficLogger.log()
+	Mongoid::TrafficLogger.log
 
 Or, in case of Rails, you can use the `.after_action` macro with the `#log_traffic` helper method in your controllers:
 
@@ -42,10 +42,16 @@ Or, in case of Rails controller:
 		after_action :log_scoped_traffic, only: [:show]
 	end
 
-By default, the `:log_scoped_traffic` method scopes your log by the request path (for example '/pages/123'). You can override this with your scope like this:
+By default, the `:log_scoped_traffic` method scopes your log by the request path (for example '/pages/123'). You can override this behavior with custom scope like this:
 
 	class MyController < ApplicationController
-		after_action { |c| c.log_scoped_traffic(scope: 'my-scope-comes-here') }, only: [:show]
+		after_action :log_scoped_traffic, only: [:show]
+
+		private
+		
+		def log_scoped_traffic
+			super.log_scoped_traffic(scope: 'my-scope-comes-here')
+		end
 	end
 
 It might be good idea to use both methods in order to log access to the whole site as well as access to individual pages:
