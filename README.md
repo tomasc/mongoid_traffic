@@ -30,6 +30,22 @@ Or, in case of Rails, use the `after_action` macro in your controller:
 		after_action :log_traffic, only: [:show]
 	end
 
+## Accessing the log
+
+### Access count
+
+The total number of views in a specific month can be accessed like this:
+
+	Mongoid::TrafficLog.for_month(2014, 8).access_count
+
+The total number of views per `record_id` like this:
+
+	Mongoid::TrafficLog.for_record_id('/pages/123').for_month(2014, 8).access_count
+
+### User Agent
+
+### Referer
+
 ## Classes
 
 This gem consists of two basic classes: `MongoidTraffic::Logger` and `MongoidTraffic::Log`. The `Logger` takes care of upserting data in to the db using atomic updates, while the `Log` class is a `Mongoid::Document` class that wraps the records into neat models with scopes and helper methods for querying the log.
@@ -63,22 +79,6 @@ Optionally, you can pass 'User-Agent' header string to the logger:
 	Mongoid::TrafficLogger.log(referer: http_referer_string)
 
 ### Rails
-
-## Accessing the log
-
-### Access count
-
-The total number of views in a specific month can be accessed like this:
-
-	Mongoid::TrafficLog.for_month(2014, 8).access_count
-
-The total number of views per `record_id` like this:
-
-	Mongoid::TrafficLog.for_record_id('/pages/123').for_month(2014, 8).access_count
-
-### User Agent
-
-### Referer
 
 ## Customization
 

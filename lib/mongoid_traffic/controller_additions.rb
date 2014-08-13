@@ -2,11 +2,14 @@ module MongoidTraffic
   module ControllerAdditions
 
     module ClassMethods
+      def log_traffic
+        
+      end
     end
 
     def self.included base
       base.extend ClassMethods
-      # base.helper_method :my_method if base.respond_to? :my_method
+      base.helper_method :log_traffic if base.respond_to? :log_traffic
     end
 
   end
