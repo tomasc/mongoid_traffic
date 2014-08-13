@@ -41,6 +41,7 @@ The total number of views in a specific month can be accessed like this:
 The total number of views per `property` like this:
 
 	Mongoid::TrafficLog.for_property('/pages/123').for_month(2014, 8).access_count
+	Mongoid::TrafficLog.for_property('/pages/123').for_date(Date.today).access_count
 
 ### User Agent
 
