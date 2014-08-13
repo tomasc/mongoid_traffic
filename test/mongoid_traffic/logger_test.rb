@@ -4,49 +4,41 @@ require_relative '../../lib/mongoid_traffic/logger'
 
 module MongoidTraffic
   describe 'Logger' do
-    let(:scope) { 'foo/bar' }
-
     let(:date) { Date.today }
     let(:year) { date.year }
     let(:month) { date.month }
     let(:day) { date.day }
 
+    let(:scope) { 'foo/bar' }
+    let(:user_agent_string) { 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/538.46 (KHTML, like Gecko) Version/8.0 Safari/538.46' }
+    let(:referer) { 'http://www.google.com' }
+
     describe 'ClassMethods' do
       describe '.log' do
 
-        # describe 'when records for current date do not exist' do
-        #   before { Logger.log(scope) }
+        describe 'when records for current date do not exist' do
+          before { Logger.log(scope: scope, user_agent: user_agent_string, referer: referer) }
 
-        #   describe 'for month' do
-        #     it 'creates Log for a scope' do
-        #       Log.for_scope(scope).for_year(year).for_month(month).where(access_count: 1).exists?.must_equal true
-        #     end
-        #     it 'creates Log for all properties' do
-        #       Log.for_year(year).for_month(month).where(access_count: 1).exists?.must_equal true
-        #     end
-        #   end
-
-        #   describe 'for date' do
-        #     it 'creates Log for a scope' do
-        #       Log.for_scope(scope).for_date(date).where(access_count: 1).exists?.must_equal true
-        #     end
-        #     it 'creates Log for all properties' do
-        #       Log.for_date(date).where(access_count: 1).exists?.must_equal true
-        #     end
-        #   end
-        # end
+          it 'logs for year & month' do
+            Log.unscoped.for_year(year).for_month(month).must_be :exists?
+          end
+          it 'logs for date' do
+            Log.unscoped.for_date(date).must_be :exists?
+          end
+          it 'logs for scope' do
+            Log.unscoped.for_scope(scope).must_be :exists?
+          end
+          it 'logs access_count' do
+            Log.unscoped.first.access_count.must_equal 1
+          end
+          it 'logs user_agent' do
+            Log.unscoped.first.browsers.fetch('Macintosh').fetch('Safari').fetch('8%2E0').must_equal 1
+          end
+          it 'referer' do
+            Log.unscoped.first.referers.fetch('www%2Egoogle%2Ecom').must_equal 1
+          end
+        end
         
-      end
-
-      describe 'user_agent' do
-        let(:user_agent_string) { 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/538.46 (KHTML, like Gecko) Version/8.0 Safari/538.46' }
-
-        it 'extracts :browser_name' do
-          Logger.new(user_agent: user_agent_string).browser_name.must_equal 'Safari'
-        end
-        it 'extracts :browser_version' do
-          Logger.new(user_agent: user_agent_string).browser_version.must_equal '8_0'
-        end
       end
     end
 

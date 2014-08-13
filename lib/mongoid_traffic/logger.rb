@@ -1,6 +1,9 @@
+require 'uri'
 require 'useragent'
 
 require_relative './log'
+require_relative './logger/browser'
+require_relative './logger/referer'
 
 module MongoidTraffic
   class Logger
@@ -14,15 +17,19 @@ module MongoidTraffic
     def initialize scope: nil, user_agent: nil, referer: nil
       @scope = scope
       @user_agent_string = user_agent
-      @referer = referer
+      @referer_string = referer
     end
 
     def log
-
-      %i(y ym ymd).each do |scope|
-        Log.collection.find(time_query(scope)).upsert(upsert_query)
-        Log.collection.find(scope_query.merge(time_query(scope))).upsert(upsert_query)
+      %i(ym ymd).each do |ts|
+        Log.collection.find( find_query(ts) ).upsert( upsert_query )
       end
+    end
+
+    # ---------------------------------------------------------------------
+
+    def upsert_query
+      { '$inc' => access_count_query.merge(browser_query).merge(referer_query) }
     end
 
     # ---------------------------------------------------------------------
@@ -31,41 +38,54 @@ module MongoidTraffic
       { ac: 1 }
     end
 
-    def upsert_query
-      { '$inc' => access_count_query }
+    def browser_query
+      return {} unless browser.present?
+      browser_path = [browser.platform, browser.name, browser.version].map{ |s| escape_key(s) }.join('.')
+      { "b.#{browser_path}" => 1 }
+    end
+
+    def referer_query
+      return {} unless referer.present?
+      referer_key = escape_key(referer.host)
+      { "r.#{referer_key}" => 1 }
+    end
+
+    # ---------------------------------------------------------------------
+    
+    def escape_key key
+      key.gsub('.', '%2E')
     end
 
     # ---------------------------------------------------------------------
 
-    def browser_path
-      [platform, browser_name, browser_version].join('.')
+    def find_query ts
+      res = time_query(ts)
+      res = res.merge(scope_query) if @scope.present?
+      res
     end
-
-    def browser_name
-      user_agent.browser
-    end
-
-    def browser_version
-      user_agent.version.to_s.split('.')[0..1].join('_')
-    end
-
-    # ---------------------------------------------------------------------
 
     def scope_query
-      { p: @scope }
+      { s: @scope }
     end
 
-    def time_query scope
-      case scope
-      when :ym then { y: Date.today.year, m: Date.today.month, d: nil }
-      when :ymd then { y: Date.today.year, m: Date.today.month, d: Date.today.day }
+    def time_query ts
+      date = Date.today
+      case ts
+      when :ym then { y: date.year, m: date.month, d: nil }
+      when :ymd then { y: date.year, m: date.month, d: date.day }
       end
     end
 
     private # =============================================================
     
-    def user_agent
-      @user_agent ||= ::UserAgent.parse(@user_agent_string)
+    def browser
+      return unless @user_agent_string.present?
+      @browser ||= Browser.new(@user_agent_string)
+    end
+
+    def referer
+      return unless @referer_string.present?
+      @referer ||= Referer.new(@referer_string)
     end
 
   end

@@ -33,6 +33,11 @@ module MongoidTraffic
         subject.browsers.must_be_kind_of Hash
       end
 
+      it 'has :referers' do
+        subject.must_respond_to :referers
+        subject.referers.must_be_kind_of Hash
+      end
+
     end
 
   end

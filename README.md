@@ -71,7 +71,7 @@ The total number of views within a specific month can be accessed like this:
 
 The total number of views per scope per specific date like this:
 
-	Mongoid::TrafficLog.for_date(Date.today).access_count
+	Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').access_count
 
 ### User Agent
 

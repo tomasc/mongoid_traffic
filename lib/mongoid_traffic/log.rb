@@ -13,6 +13,7 @@ module MongoidTraffic
 
     field :ac, as: :access_count, type: Integer
     field :b, as: :browsers, type: Hash, default: {}
+    field :r, as: :referers, type: Hash, default: {}
 
     # ---------------------------------------------------------------------
     
@@ -31,8 +32,6 @@ module MongoidTraffic
     scope :for_day, -> day { where(day: day) }
 
     scope :for_date, -> date { where(year: date.year, month: date.month, day: date.day) }
-
-    # =====================================================================
     
   end
 end
