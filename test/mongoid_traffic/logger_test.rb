@@ -6,27 +6,41 @@ module MongoidTraffic
   describe 'Logger' do
     let(:property) { 'foo/bar' }
 
+    let(:date) { Date.today }
+    let(:year) { date.year }
+    let(:month) { date.month }
+    let(:day) { date.day }
+
     describe 'ClassMethods' do
       describe '.log' do
 
         describe 'when records for current date do not exist' do
           before { Logger.log(property) }
 
-          describe 'for year & month' do
+          describe 'for year' do
             it 'creates Log for a property' do
-              Log.for_property(property).for_month(Date.today).where(access_count: 1).exists?.must_equal true
+              Log.for_property(property).for_year(year).where(access_count: 1).exists?.must_equal true
             end
             it 'creates Log for all properties' do
-              Log.for_all_properties.for_month(Date.today).where(access_count: 1).exists?.must_equal true
+              Log.for_year(year).where(access_count: 1).exists?.must_equal true
+            end
+          end
+
+          describe 'for month' do
+            it 'creates Log for a property' do
+              Log.for_property(property).for_year(year).for_month(month).where(access_count: 1).exists?.must_equal true
+            end
+            it 'creates Log for all properties' do
+              Log.for_year(year).for_month(month).where(access_count: 1).exists?.must_equal true
             end
           end
 
           describe 'for date' do
             it 'creates Log for a property' do
-              Log.for_property(property).for_date(Date.today).where(access_count: 1).exists?.must_equal true
+              Log.for_property(property).for_date(date).where(access_count: 1).exists?.must_equal true
             end
             it 'creates Log for all properties' do
-              Log.for_all_properties.for_date(Date.today).where(access_count: 1).exists?.must_equal true
+              Log.for_date(date).where(access_count: 1).exists?.must_equal true
             end
           end
         end

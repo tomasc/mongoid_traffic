@@ -22,9 +22,14 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
     
-    scope :for_all_properties, -> { where(property: nil) }
-    scope :for_property, -> (property) { where(property: property) }
-    scope :for_month, -> (date) { where(year: date.year, month: date.month, day: nil) }
+    default_scope -> { where(property: nil, year: Date.today.year, month: nil, day: nil) }
+
+    scope :for_property, -> property { where(property: property) }
+
+    scope :for_year, -> year { where(year: year) }
+    scope :for_month, -> month { where(month: month) }
+    scope :for_day, -> day { where(day: day) }
+
     scope :for_date, -> date { where(year: date.year, month: date.month, day: date.day) }
 
     # =====================================================================

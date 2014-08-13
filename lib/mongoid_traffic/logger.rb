@@ -18,7 +18,7 @@ module MongoidTraffic
 
     def log
 
-      %i(ym ymd).each do |scope|
+      %i(y ym ymd).each do |scope|
         Log.collection.find(time_query(scope)).upsert(upsert_query)
         Log.collection.find(property_query.merge(time_query(scope))).upsert(upsert_query)
       end
@@ -56,6 +56,7 @@ module MongoidTraffic
 
     def time_query scope
       case scope
+      when :y then { y: Date.today.year, m: nil, d: nil }
       when :ym then { y: Date.today.year, m: Date.today.month, d: nil }
       when :ymd then { y: Date.today.year, m: Date.today.month, d: Date.today.day }
       end
