@@ -94,7 +94,6 @@ The total number of views per scope per specific date like this:
 ```Ruby
 Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').access_count
 ```
->>>>>>> FETCH_HEAD
 
 ### User Agent
 
