@@ -34,6 +34,16 @@ Mongoid::TrafficLogger.log
 
 ### Optional arguments
 
+#### Time scope:
+
+By default, the `.log` method creates/updates a document with aggregations for month and a document with aggregations for a day. You can however customize this behaviour like this:
+
+```Ruby
+Mongoid::TrafficLogger.log(time_scope: %i(month week day))
+```
+
+Your application might display daily stats for the last month, and then only aggregations per each month. In that case, you might want to regularly purge the daily logs from the previous months.
+
 #### Scope:
 
 ```Ruby

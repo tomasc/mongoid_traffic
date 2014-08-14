@@ -43,6 +43,10 @@ module MongoidTraffic
         subject.countries.must_be_kind_of Hash
       end
 
+      it 'has :updated_at' do
+        subject.must_respond_to :updated_at
+      end
+
     end
 
   end

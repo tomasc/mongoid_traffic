@@ -16,6 +16,8 @@ module MongoidTraffic
     field :c, as: :countries, type: Hash, default: {}
     field :r, as: :referers, type: Hash, default: {}
 
+    field :uat, as: :updated_at, type: Time
+
     # ---------------------------------------------------------------------
     
     validates :year, presence: true
@@ -35,3 +37,7 @@ module MongoidTraffic
     
   end
 end
+
+# df
+# dt
+# time_scope: [y,m,w,d,h,m]

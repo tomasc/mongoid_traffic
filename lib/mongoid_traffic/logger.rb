@@ -24,7 +24,7 @@ module MongoidTraffic
 
     def log
       return if Bots.is_a_bot?(@referer_string)
-      %i(ym ymd).each do |ts|
+      %i(year day).each do |ts|
         Log.collection.find( find_query(ts) ).upsert( upsert_query )
       end
     end
@@ -84,8 +84,8 @@ module MongoidTraffic
     def time_query ts
       date = Date.today
       case ts
-      when :ym then { y: date.year, m: date.month, d: nil }
-      when :ymd then { y: date.year, m: date.month, d: date.day }
+      when :year then { y: date.year, m: date.month, d: nil }
+      when :day then { y: date.year, m: date.month, d: date.day }
       end
     end
 
