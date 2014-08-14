@@ -204,7 +204,7 @@ Followed by an aggregation. For example on access count:
 Mongoid::TrafficLog.daily(Date.today).for_scope('/pages/123').aggregate_on(:access_count)
 ```
 
-The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For exmaple should you want to query for all pages that have path beginning with '/blog':
+The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For example should you want to query for all pages that have path beginning with '/blog':
 
 ```Ruby
 Mongoid::TrafficLog.monthly(8, 2014).for_scope(/\A\/blog/).aggregate_on(:country)

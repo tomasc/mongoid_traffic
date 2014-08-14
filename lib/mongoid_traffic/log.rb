@@ -32,6 +32,7 @@ module MongoidTraffic
 
     scope :yearly, -> year { self.for_dates(Date.parse("01/01/#{year}"), Date.parse("01/01/#{year}").at_end_of_year) }
     scope :monthly, -> month, year { self.for_dates(Date.parse("01/#{month}/#{year}"), Date.parse("01/#{month}/#{year}").at_end_of_month) }
+    scope :weekly, -> week, year { self.for_dates(Date.commercial(year, week), Date.commercial(year, week).at_end_of_week) }
     scope :daily, -> date { self.for_dates(date, date) }
 
     scope :for_scope, -> scope { where(scope: scope) }

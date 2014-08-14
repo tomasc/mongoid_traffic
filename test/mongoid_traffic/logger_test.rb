@@ -22,7 +22,6 @@ module MongoidTraffic
         end
 
         it 'logs for month' do
-          p Log.monthly(month, year).first
           Log.monthly(month, year).count.must_equal 1
         end
         it 'logs for date' do
@@ -50,7 +49,7 @@ module MongoidTraffic
         describe 'when referer a bot' do
           let(:referer) { 'Googlebot/Test ( http://www.googlebot.com/bot.html)' }
           it 'does not create log' do
-            Log.unscoped.wont_be :exists?
+            Log.exists?.must_equal false
           end
         end
       end
