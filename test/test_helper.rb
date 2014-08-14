@@ -1,5 +1,4 @@
 require 'bundler/setup'
-require 'coveralls'
 require 'database_cleaner'
 require 'minitest'
 require 'minitest/autorun'
