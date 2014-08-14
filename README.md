@@ -157,25 +157,25 @@ Behind the scenes, this method will take all documents returned by your criteria
 Typically you first query by time:
 
 ```Ruby
-Mongoid::TrafficLog.for_date(Date.today)
+Mongoid::TrafficLog.daily(Date.today)
 ```
 
 And eventually by scope:
 
 ```Ruby
-Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123')
+Mongoid::TrafficLog.daily(Date.today).for_scope('/pages/123')
 ```
 
 Followed by an aggregation. For example on access count:
 
 ```Ruby
-Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').aggregate_on(:access_count)
+Mongoid::TrafficLog.daily(Date.today).for_scope('/pages/123').aggregate_on(:access_count)
 ```
 
 The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For exmaple should you want to query for all pages that have path beginning with '/blog':
 
 ```Ruby
-Mongoid::TrafficLog.for_year(2014).for_month(8).for_scope(/\A\/blog/).aggregate_on(:country)
+Mongoid::TrafficLog.monthly(8, 2014).for_scope(/\A\/blog/).aggregate_on(:country)
 ```
 
 ## Credits & further reading
