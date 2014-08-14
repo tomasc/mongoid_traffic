@@ -40,4 +40,4 @@ end
 
 # df
 # dt
-# time_scope: [y,m,w,d,h,m]
+# time_scope: [year month week day hour]
