@@ -109,7 +109,7 @@ MongoidTraffic::Logger.log(unique_id: unique_id_string)
 Logs access count by id:
 
 ```Ruby
-{ "127.0.0.1" => 100, "88.198.50.152" => 1 }
+{ "0123456789" => 100, "ABCDEFGHIJ" => 1 }
 ```
 
 Typically you would pass it something like `session_id` to track unique visitors.
