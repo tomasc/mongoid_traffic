@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/tomasc/mongoid_traffic.svg)](https://travis-ci.org/tomasc/mongoid_traffic) [![Gem Version](https://badge.fury.io/rb/mongoid_traffic.svg)](http://badge.fury.io/rb/mongoid_traffic) [![Coverage Status](https://img.shields.io/coveralls/tomasc/mongoid_traffic.svg)](https://coveralls.io/r/tomasc/mongoid_traffic)
 
-Aggregated traffic logs stored in MongoDB. 
+Aggregated traffic logs stored in MongoDB. Fast and efficient logging via atomic updates of nested hashes in small number of MongoDB documents, semi-fast retrieveal and aggregation.
 
 ## Installation
 
@@ -167,7 +167,7 @@ The scope query accepts regular expressions, which allows for aggregations on sp
 Mongoid::TrafficLog.for_year(2014).for_month(8).for_scope(/\A\/blog/).aggregate_on(:country)
 ```
 
-## Credits
+## Credits & further reading
 
 Based on the approach described by John Nunemaker [here](http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/) and [here](http://www.railstips.org/blog/archives/2011/07/31/counters-everywhere-part-2/).
 
