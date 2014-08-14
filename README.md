@@ -42,7 +42,7 @@ By default, the `.log` method creates/updates a document with aggregations for m
 Mongoid::TrafficLogger.log(time_scope: %i(month week day))
 ```
 
-Your application might display daily stats for the last month, and then only aggregations per each month. In that case, you might want to regularly purge the daily logs from the previous months.
+Your application might display daily stats for the last month, and then only aggregations per the previous months. In that case, you might want to regularly purge the no longer needed daily logs.
 
 #### Scope:
 
