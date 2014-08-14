@@ -92,7 +92,9 @@ class MyController < ApplicationController
 end
 ```
 
-Eventually the `:log_scoped_traffic` method which scopes the log by the current request path (`/pages/123`):
+The method automatically infers most of the options from the controller `request` method (User-Agent, Referer, IP address) and unique id from the Rails session.
+
+Additionally the `:log_scoped_traffic` method adds a scope by the current request path (`/pages/123`):
 
 ```Ruby
 class MyController < ApplicationController
