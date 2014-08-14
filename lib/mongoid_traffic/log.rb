@@ -26,13 +26,12 @@ module MongoidTraffic
     
     default_scope -> { where(scope: nil, year: Date.today.year, month: nil, day: nil) }
 
-    scope :for_scope, -> scope { where(scope: scope) }
-
     scope :for_year, -> year { where(year: year) }
     scope :for_month, -> month { where(month: month) }
     scope :for_day, -> day { where(day: day) }
-
     scope :for_date, -> date { where(year: date.year, month: date.month, day: date.day) }
+
+    scope :for_scope, -> scope { where(scope: scope) }
     
   end
 end
