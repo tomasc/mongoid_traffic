@@ -178,7 +178,7 @@ The scope query accepts regular expressions, which allows for aggregations on sp
 Mongoid::TrafficLog.monthly(8, 2014).for_scope(/\A\/blog/).aggregate_on(:country)
 ```
 
-## Credits & further reading
+## Further reading
 
 Based on the approach described by John Nunemaker [here](http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/) and [here](http://www.railstips.org/blog/archives/2011/07/31/counters-everywhere-part-2/).
 
