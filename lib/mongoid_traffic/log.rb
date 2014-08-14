@@ -37,5 +37,39 @@ module MongoidTraffic
 
     scope :scoped_to, -> scope { where(scope: scope) }
     
+    # =====================================================================
+    
+    def self.aggregate_on att
+      case find_field_by_name(att).type.to_s
+      when 'Integer' then sum(att)
+      when 'Hash' then sum_hash(att)
+      end
+    end
+
+
+    private # =============================================================
+    
+    def self.find_field_by_name field_name
+      return unless f = fields.detect{ |k,v| k == field_name.to_s or v.options[:as].to_s == field_name.to_s }
+      f.last
+    end
+
+    def self.sum_hash field_name
+      res = {}
+      self.pluck(field_name).each do |h|
+        merger = proc { |key, v1, v2| 
+          if Hash === v1 && Hash === v2
+            v1.merge(v2, &merger)
+          elsif Hash === v2
+            v2
+          else
+            v1.to_i + v2.to_i
+          end
+        }
+        res = res.merge(h, &merger)
+      end
+      res
+    end
+
   end
 end

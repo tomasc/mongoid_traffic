@@ -177,7 +177,7 @@ To narrow down by scope:
 ### Aggregation method
 
 * `.aggregate_on(:access_count)`
-* `.aggregate_on(:user_agent)`
+* `.aggregate_on(:browsers)`
 * `.aggregate_on(:referer)`
 * `.aggregate_on(:country)`
 * `.aggregate_on(:unique_id)`
