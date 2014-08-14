@@ -133,7 +133,7 @@ The following criteria are predefined as Mongoid scopes:
 * `.aggregate_on(:country)`
 * `.aggregate_on(:unique_id)`
 
-Behind the scenes, this method will take all documents returned by your criteria and combines the values of the specified field (in case of `:access_count` it is simple sum of the values, in other cases it is sum of deeply nested hashes).
+Behind the scenes, this method will take all documents returned by your criteria and combines the values of the specified field (in case of `:access_count` it is simple sum of the values, in other cases it is sum of nested hashes).
 
 ### Examples
 
