@@ -7,18 +7,6 @@ module MongoidTraffic
     subject { Log.new }
 
     describe 'fields' do
-      it 'has :year' do
-        subject.must_respond_to :year
-      end
-
-      it 'has :month' do
-        subject.must_respond_to :month
-      end
-
-      it 'has :day' do
-        subject.must_respond_to :day
-      end
-
       it 'has :scope' do
         subject.must_respond_to :scope
       end

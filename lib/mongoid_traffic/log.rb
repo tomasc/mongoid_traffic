@@ -5,10 +5,6 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
     
-    field :y, as: :year, type: Integer
-    field :m, as: :month, type: Integer
-    field :d, as: :day, type: Integer
-    
     field :s, as: :scope, type: String
 
     field :ac, as: :access_count, type: Integer

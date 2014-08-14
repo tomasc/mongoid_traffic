@@ -32,7 +32,7 @@ Log your traffic like this:
 MongoidTraffic::Logger.log
 ```
 
-This will (by default) create two Mo
+This will (by default) create two `MongoidTraffic::Log` documents: first with `:df(date_from)` and `:dt(date_to)` fields specifying monthly log, second with dates specifying daily log. Each log has an `:access_count` attribute that is incremented with subsequent `.log` calls.
 
 ### Optional arguments
 

@@ -23,13 +23,14 @@ module MongoidTraffic
         end
 
         it 'logs for month' do
-          Log.monthly(month, year).must_be :exists?
+          p Log.monthly(month, year).to_a
+          Log.monthly(month, year).count.must_equal 1
         end
         it 'logs for date' do
-          Log.daily(date).must_be :exists?
+          Log.daily(date).count.must_equal 1
         end
         it 'logs for scope' do
-          Log.for_scope(scope).must_be :exists?
+          Log.for_scope(scope).count.must_equal 2
         end
         it 'logs access_count' do
           Log.first.access_count.must_equal 1
