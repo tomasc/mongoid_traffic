@@ -13,12 +13,13 @@ module MongoidTraffic
     let(:user_agent_string) { 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10) AppleWebKit/538.46 (KHTML, like Gecko) Version/8.0 Safari/538.46' }
     let(:referer) { 'http://www.google.com' }
     let(:ip_address) { '88.198.50.152' }
+    let(:unique_id) { 'ABC' }
 
     describe 'ClassMethods' do
       describe '.log' do
         before do 
-          Logger.log(user_agent: user_agent_string, referer: referer, ip_address: ip_address)
-          Logger.log(scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address)
+          Logger.log(user_agent: user_agent_string, referer: referer, ip_address: ip_address, unique_id: unique_id)
+          Logger.log(scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address, unique_id: unique_id)
         end
 
         it 'logs for month' do
@@ -41,6 +42,9 @@ module MongoidTraffic
         end
         it 'logs country' do
           Log.first.countries.fetch('DE').must_equal 1
+        end
+        it 'logs unique_id' do
+          Log.first.unique_ids.fetch('ABC').must_equal 1
         end
         it 'logs updated_at' do
           Log.first.updated_at.must_be :present?

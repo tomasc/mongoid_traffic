@@ -21,11 +21,12 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
 
-    def initialize ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), user_agent: nil 
+    def initialize ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), unique_id: nil, user_agent: nil 
       @ip_address = ip_address
       @referer_string = referer
       @scope = scope
       @time_scope = time_scope
+      @unique_id = unique_id
       @user_agent_string = user_agent
     end
 
@@ -45,7 +46,8 @@ module MongoidTraffic
         '$inc' => access_count_query.
           merge(browser_query).
           merge(country_query).
-          merge(referer_query),
+          merge(referer_query).
+          merge(unique_id_query),
         '$set' => { uat: Time.now }
       }
     end
@@ -65,13 +67,20 @@ module MongoidTraffic
     def country_query
       return {} unless @ip_address.present?
       return {} unless country_code2 = GeoIp.country_code2(@ip_address)
-      { "c.#{country_code2}" => 1 }
+      country_code_key = escape_key(country_code2)
+      { "c.#{country_code_key}" => 1 }
     end
 
     def referer_query
       return {} unless referer.present?
       referer_key = escape_key(referer.to_s)
       { "r.#{referer_key}" => 1 }
+    end
+
+    def unique_id_query
+      return {} unless @unique_id.present?
+      unique_id_key = escape_key(@unique_id.to_s)
+      { "u.#{unique_id_key}" => 1 }
     end
 
     # ---------------------------------------------------------------------

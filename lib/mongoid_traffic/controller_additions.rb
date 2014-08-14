@@ -1,14 +1,25 @@
 module MongoidTraffic
   module ControllerAdditions
 
-    module ClassMethods
-      def log_traffic
-      end
+    def log_traffic scope: nil
+      MongoidTraffic::Logger.log(
+        ip_address: request.remote_ip,
+        referer: request.headers['Referer'],
+        unique_id: request.session_options[:id], # FIXME: not sure about this
+        user_agent: request.headers['User-Agent']
+      )
+    end
+    
+    def log_scoped_traffic scope: nil
+      log_traffic(scope: (scope || request.fullpath.split('?').first))
     end
 
+    # ---------------------------------------------------------------------
+    
     def self.included base
       base.extend ClassMethods
-      base.helper_method :log_traffic if base.respond_to? :log_traffic
+      base.helper_method :log_traffic
+      base.helper_method :log_scoped_traffic
     end
 
   end
