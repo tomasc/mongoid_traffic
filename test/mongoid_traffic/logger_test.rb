@@ -23,7 +23,6 @@ module MongoidTraffic
         end
 
         it 'logs for month' do
-          p Log.monthly(month, year).to_a
           Log.monthly(month, year).count.must_equal 1
         end
         it 'logs for date' do

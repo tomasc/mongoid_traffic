@@ -11,23 +11,29 @@ require_relative './logger/referer'
 module MongoidTraffic
   class Logger
 
+    TIME_SCOPE_OPTIONS = %i(year month week day)
+
+    # ---------------------------------------------------------------------
+    
     def self.log *args
       new(*args).log
     end
 
     # ---------------------------------------------------------------------
 
-    def initialize ip_address: nil, referer: nil, scope: nil, user_agent: nil 
+    def initialize ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), user_agent: nil 
       @ip_address = ip_address
       @referer_string = referer
       @scope = scope
+      @time_scope = time_scope
       @user_agent_string = user_agent
     end
 
-    def log time_scope: %i(month day)
+    def log
       return if Bots.is_a_bot?(@referer_string)
-      
-      time_scope.each do |ts|
+      raise "Invalid time scope definition: #{@time_scope}" unless @time_scope.all?{ |ts| TIME_SCOPE_OPTIONS.include?(ts) }
+
+      @time_scope.each do |ts|
         Log.collection.find( find_query(ts) ).upsert( upsert_query )
       end
     end
@@ -87,7 +93,6 @@ module MongoidTraffic
     end
 
     def time_query ts
-      raise "Invalid time scope: #{ts}" unless %i(year month week day).include?(ts)
       date = Date.today
       case ts
       when :day then { df: date, dt: date }
