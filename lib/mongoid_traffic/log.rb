@@ -20,24 +20,25 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
     
-    validates :year, presence: true
-    validates :month, presence: true, inclusion: { in: 1..12 }
-    validates :day, presence: true, inclusion: { in: 1..31 }
+    field :df, as: :date_from, type: Date
+    field :dt, as: :date_to, type: Date
 
     # ---------------------------------------------------------------------
     
-    default_scope -> { where(scope: nil, year: Date.today.year, month: nil, day: nil) }
+    validates :date_from, presence: true
+    validates :date_to, presence: true
 
-    scope :for_year, -> year { where(year: year) }
-    scope :for_month, -> month { where(month: month) }
-    scope :for_day, -> day { where(day: day) }
-    scope :for_date, -> date { where(year: date.year, month: date.month, day: date.day) }
+    # ---------------------------------------------------------------------
+    
+    default_scope -> { where(scope: nil) }
+
+    scope :for_dates, -> date_from, date_to { where(date_from: date_from, date_to: date_to) }
+
+    scope :yearly, -> year { self.for_dates(Date.parse("01/01/#{year}"), Date.parse("01/01/#{year}").at_end_of_year) }
+    scope :monthly, -> month, year { self.for_dates(Date.parse("01/#{month}/#{year}"), Date.parse("01/#{month}/#{year}").at_end_of_month) }
+    scope :daily, -> date { self.for_dates(date, date) }
 
     scope :for_scope, -> scope { where(scope: scope) }
     
   end
 end
-
-# df
-# dt
-# time_scope: [year month week day hour]

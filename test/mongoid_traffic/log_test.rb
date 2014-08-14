@@ -4,7 +4,6 @@ require_relative '../../lib/mongoid_traffic/log'
 
 module MongoidTraffic
   describe 'Log' do
-
     subject { Log.new }
 
     describe 'fields' do
@@ -46,7 +45,6 @@ module MongoidTraffic
       it 'has :updated_at' do
         subject.must_respond_to :updated_at
       end
-
     end
 
   end

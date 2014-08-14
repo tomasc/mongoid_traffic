@@ -24,9 +24,10 @@ module MongoidTraffic
       @user_agent_string = user_agent
     end
 
-    def log
+    def log time_scope: %i(month day)
       return if Bots.is_a_bot?(@referer_string)
-      %i(year day).each do |ts|
+      
+      time_scope.each do |ts|
         Log.collection.find( find_query(ts) ).upsert( upsert_query )
       end
     end
@@ -86,10 +87,11 @@ module MongoidTraffic
     end
 
     def time_query ts
+      raise "Invalid time scope: #{ts}" unless %i(year month week day).include?(ts)
       date = Date.today
       case ts
-      when :year then { y: date.year, m: date.month, d: nil }
-      when :day then { y: date.year, m: date.month, d: date.day }
+      when :day then { df: date, dt: date }
+      else { df: date.send("at_beginning_of_#{ts}"), dt: date.send("at_end_of_#{ts}") }
       end
     end
 

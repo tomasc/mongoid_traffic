@@ -17,31 +17,34 @@ module MongoidTraffic
     describe 'ClassMethods' do
       describe '.log' do
 
-        before { Logger.log(scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address) }
+        before do 
+          Logger.log(user_agent: user_agent_string, referer: referer, ip_address: ip_address)
+          Logger.log(scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address)
+        end
 
-        it 'logs for year & month' do
-          Log.unscoped.for_year(year).for_month(month).must_be :exists?
+        it 'logs for month' do
+          Log.monthly(month, year).must_be :exists?
         end
         it 'logs for date' do
-          Log.unscoped.for_date(date).must_be :exists?
+          Log.daily(date).must_be :exists?
         end
         it 'logs for scope' do
-          Log.unscoped.for_scope(scope).must_be :exists?
+          Log.for_scope(scope).must_be :exists?
         end
         it 'logs access_count' do
-          Log.unscoped.first.access_count.must_equal 1
+          Log.first.access_count.must_equal 1
         end
         it 'logs user_agent' do
-          Log.unscoped.first.browsers.fetch('Macintosh').fetch('Safari').fetch('8%2E0').must_equal 1
+          Log.first.browsers.fetch('Macintosh').fetch('Safari').fetch('8%2E0').must_equal 1
         end
         it 'logs referer' do
-          Log.unscoped.first.referers.fetch('http%3A%2F%2Fwww%2Egoogle%2Ecom').must_equal 1
+          Log.first.referers.fetch('http%3A%2F%2Fwww%2Egoogle%2Ecom').must_equal 1
         end
         it 'logs country' do
-          Log.unscoped.first.countries.fetch('DE').must_equal 1
+          Log.first.countries.fetch('DE').must_equal 1
         end
         it 'logs updated_at' do
-          Log.unscoped.first.updated_at.must_be :present?
+          Log.first.updated_at.must_be :present?
         end
 
         describe 'when referer a bot' do

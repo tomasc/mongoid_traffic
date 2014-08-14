@@ -131,12 +131,15 @@ The log is accessed with a combination of Mongoid Criteria and aggregation metho
 
 ### Criteria
 
-The following criteria are predefined as Mongoid scopes:
+The following time based criteria are predefined as Mongoid scopes:
 
-* `.for_year(year)`
-* `.for_month(month)`
-* `.for_day(day)`
-* `.for_date(date)`
+* `.yearly(year)`
+* `.monthly(month, year)`
+* `.weekly(week, year)`
+* `.daily(date)`
+
+To narrow down by scope:
+
 * `.for_scope(scope)`
 
 ### Aggregation method
