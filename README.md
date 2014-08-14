@@ -213,7 +213,7 @@ Mongoid::TrafficLog.daily(Date.today).scoped_to('/pages/123').aggregate_on(:acce
 The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For example should you want to query for all pages that have path beginning with '/blog':
 
 ```Ruby
-Mongoid::TrafficLog.monthly(8, 2014).scoped_to(/\A\/blog/).aggregate_on(:country)
+Mongoid::TrafficLog.monthly(8, 2014).scoped_to(/\A\/blog/).aggregate_on(:countries)
 ```
 
 ## Further reading
