@@ -40,6 +40,9 @@ module MongoidTraffic
         it 'logs country' do
           Log.unscoped.first.countries.fetch('DE').must_equal 1
         end
+        it 'logs updated_at' do
+          Log.unscoped.first.updated_at.must_be :present?
+        end
 
         describe 'when referer a bot' do
           let(:referer) { 'Googlebot/Test ( http://www.googlebot.com/bot.html)' }

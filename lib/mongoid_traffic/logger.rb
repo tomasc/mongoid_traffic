@@ -3,7 +3,9 @@ require 'uri'
 require 'useragent'
 
 require_relative './log'
+require_relative './logger/bots'
 require_relative './logger/browser'
+require_relative './logger/geo_ip'
 require_relative './logger/referer'
 
 module MongoidTraffic
@@ -32,10 +34,12 @@ module MongoidTraffic
     # ---------------------------------------------------------------------
 
     def upsert_query
-      { '$inc' => access_count_query.
+      { 
+        '$inc' => access_count_query.
           merge(browser_query).
           merge(country_query).
-          merge(referer_query)
+          merge(referer_query),
+        '$set' => { uat: Time.now }
       }
     end
 
