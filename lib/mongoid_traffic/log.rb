@@ -39,6 +39,10 @@ module MongoidTraffic
 
     scope :scoped_to, -> scope { where(scope: scope) }
     
+    # ---------------------------------------------------------------------
+    
+    index({ scope: 1, date_from: 1, date_to: 1 })
+
     # =====================================================================
     
     def self.aggregate_on att
