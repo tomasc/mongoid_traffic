@@ -172,7 +172,7 @@ The following time based criteria are predefined as Mongoid scopes:
 
 To narrow down by scope:
 
-* `.for_scope(scope)`
+* `.scoped_to(scope)`
 
 ### Aggregation method
 
@@ -195,19 +195,19 @@ Mongoid::TrafficLog.daily(Date.today)
 And eventually by scope:
 
 ```Ruby
-Mongoid::TrafficLog.daily(Date.today).for_scope('/pages/123')
+Mongoid::TrafficLog.daily(Date.today).scoped_to('/pages/123')
 ```
 
 Followed by an aggregation. For example on access count:
 
 ```Ruby
-Mongoid::TrafficLog.daily(Date.today).for_scope('/pages/123').aggregate_on(:access_count)
+Mongoid::TrafficLog.daily(Date.today).scoped_to('/pages/123').aggregate_on(:access_count)
 ```
 
 The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For example should you want to query for all pages that have path beginning with '/blog':
 
 ```Ruby
-Mongoid::TrafficLog.monthly(8, 2014).for_scope(/\A\/blog/).aggregate_on(:country)
+Mongoid::TrafficLog.monthly(8, 2014).scoped_to(/\A\/blog/).aggregate_on(:country)
 ```
 
 ## Further reading

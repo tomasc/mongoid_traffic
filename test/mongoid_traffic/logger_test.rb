@@ -28,7 +28,7 @@ module MongoidTraffic
           Log.daily(date).count.must_equal 1
         end
         it 'logs for scope' do
-          Log.for_scope(scope).count.must_equal 2
+          Log.scoped_to(scope).count.must_equal 2
         end
         it 'logs access_count' do
           Log.first.access_count.must_equal 1

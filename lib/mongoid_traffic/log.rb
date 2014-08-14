@@ -35,7 +35,7 @@ module MongoidTraffic
     scope :weekly, -> week, year { self.for_dates(Date.commercial(year, week), Date.commercial(year, week).at_end_of_week) }
     scope :daily, -> date { self.for_dates(date, date) }
 
-    scope :for_scope, -> scope { where(scope: scope) }
+    scope :scoped_to, -> scope { where(scope: scope) }
     
   end
 end
