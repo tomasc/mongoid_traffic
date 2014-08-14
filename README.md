@@ -29,8 +29,10 @@ $ gem install mongoid_traffic
 Log your traffic like this:
 
 ```Ruby
-Mongoid::TrafficLogger.log
+MongoidTraffic::Logger.log
 ```
+
+This will (by default) create two Mo
 
 ### Optional arguments
 
@@ -39,7 +41,7 @@ Mongoid::TrafficLogger.log
 By default, the `.log` method creates/updates a document with aggregations for month and a document with aggregations for a day. You can however customize this behaviour like this:
 
 ```Ruby
-Mongoid::TrafficLogger.log(time_scope: %i(month week day))
+MongoidTraffic::Logger.log(time_scope: %i(month week day))
 ```
 
 The available options are: `%(year month week day hour)`
@@ -49,19 +51,19 @@ Your application might display daily stats for the last month, and then only agg
 #### Scope:
 
 ```Ruby
-Mongoid::TrafficLogger.log(scope: '/pages/123')
+MongoidTraffic::Logger.log(scope: '/pages/123')
 ```
 
 #### User-Agent:
 
 ```Ruby
-Mongoid::TrafficLogger.log(user_agent: user_agent_string)
+MongoidTraffic::Logger.log(user_agent: user_agent_string)
 ```
 
 #### Referer:
 
 ```Ruby
-Mongoid::TrafficLogger.log(referer: http_referer_string)
+MongoidTraffic::Logger.log(referer: http_referer_string)
 ```
 
 (If the referer is included in the [bot list](http://www.user-agents.org/allagents.xml) the log will not be created.)
@@ -69,7 +71,7 @@ Mongoid::TrafficLogger.log(referer: http_referer_string)
 #### Country (via IP address):
 
 ```Ruby
-Mongoid::TrafficLogger.log(ip_address: '123.123.123.123')
+MongoidTraffic::Logger.log(ip_address: '123.123.123.123')
 ```
 
 This will use the [GeoIP](https://github.com/cjheath/geoip) library to log country.
@@ -77,7 +79,7 @@ This will use the [GeoIP](https://github.com/cjheath/geoip) library to log count
 #### Unique id:
 
 ```Ruby
-Mongoid::TrafficLogger.log(unique_id: unique_id_string)
+MongoidTraffic::Logger.log(unique_id: unique_id_string)
 ```
 
 Typically you would pass it something like `session_id` to track unique visitors.
