@@ -127,26 +127,44 @@ The following criteria are predefined as Mongoid scopes:
 
 ### Aggregation method
 
-* `.aggregate(:access_count)`
-* `.aggregate(:user_agent)`
-* `.aggregate(:referer)`
-* `.aggregate(:country)`
-* `.aggregate(:unique_id)`
+* `.aggregate_on(:access_count)`
+* `.aggregate_on(:user_agent)`
+* `.aggregate_on(:referer)`
+* `.aggregate_on(:country)`
+* `.aggregate_on(:unique_id)`
 
 Behind the scenes, this method will take all documents returned by your criteria and combines the values of the specified field (in case of `:access_count` it is simple sum of the values, in other cases it is sum of deeply nested hashes).
 
 ### Examples
 
-The total number of views within a specific month can be accessed like this:
+When combined you can scope your queries by time:
 
 ```Ruby
-Mongoid::TrafficLog.for_year(2014).for_month(8).access_count
+Mongoid::TrafficLog.for_date(Date.today)
 ```
 
-The total number of views per scope per specific date like this:
+And scope:
 
 ```Ruby
-Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').access_count
+Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123')
+```
+
+And retrieve aggregated access count:
+
+```Ruby
+Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').aggregate_on(:access_count)
+```
+
+Or access count by country:
+
+```Ruby
+Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').aggregate_on(:country)
+```
+
+The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For exmaple should you want to query for all pages whose path starts with '/blog':
+
+```Ruby
+Mongoid::TrafficLog.for_year(2014).for_month(8).for_scope(/\A\/blog/).aggregate_on(:country)
 ```
 
 ## Credits
