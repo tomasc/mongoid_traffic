@@ -32,33 +32,29 @@ Log your traffic like this:
 Mongoid::TrafficLogger.log
 ```
 
-### Scope
+### Optional arguments
 
-You can scope the log using the (optional) `scope:` argument:
+#### Scope:
 
 ```Ruby
 Mongoid::TrafficLogger.log(scope: '/pages/123')
 ```
 
-### User Agent
-
-Optionally, you can pass 'User-Agent' string to the logger:
+#### User-Agent:
 
 ```Ruby
 Mongoid::TrafficLogger.log(user_agent: user_agent_string)
 ```
 
-### Referer
-
-Optionally, you can pass 'Referer' string to the logger:
+#### Referer:
 
 ```Ruby
 Mongoid::TrafficLogger.log(referer: http_referer_string)
 ```
 
-If the referer is included in the [bot list](http://www.user-agents.org/allagents.xml) the log will not be created.
+(If the referer is included in the [bot list](http://www.user-agents.org/allagents.xml) the log will not be created.)
 
-### Country
+#### Country:
 
 ## Rails
 
