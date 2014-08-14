@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/tomasc/mongoid_traffic.svg)](https://travis-ci.org/tomasc/mongoid_traffic) [![Gem Version](https://badge.fury.io/rb/mongoid_traffic.svg)](http://badge.fury.io/rb/mongoid_traffic) [![Coverage Status](https://img.shields.io/coveralls/tomasc/mongoid_traffic.svg)](https://coveralls.io/r/tomasc/mongoid_traffic)
 
-Aggregated traffic logs stored in MongoDB. Based on the approach described by John Nunemaker [here](http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/) and [here](http://www.railstips.org/blog/archives/2011/07/31/counters-everywhere-part-2/).
+Aggregated traffic logs stored in MongoDB. 
 
 ## Installation
 
@@ -54,7 +54,21 @@ Mongoid::TrafficLogger.log(referer: http_referer_string)
 
 (If the referer is included in the [bot list](http://www.user-agents.org/allagents.xml) the log will not be created.)
 
-#### Country:
+#### Country (via IP address):
+
+```Ruby
+Mongoid::TrafficLogger.log(ip_address: '123.123.123.123')
+```
+
+This will use the [GeoIP](https://github.com/cjheath/geoip) library to log country.
+
+#### Unique id:
+
+```Ruby
+Mongoid::TrafficLogger.log(unique_id: unique_id_string)
+```
+
+Typically you would pass it something like `session_id` to track unique visitors.
 
 ## Rails
 
@@ -99,7 +113,29 @@ end
 
 ## Accessing the log
 
-### Access count
+The log is accessed with a combination of Mongoid Criteria and aggregation methods. 
+
+### Criteria
+
+The following criteria are predefined as Mongoid scopes:
+
+* `.for_year(year)`
+* `.for_month(month)`
+* `.for_day(day)`
+* `.for_date(date)`
+* `.for_scope(scope)`
+
+### Aggregation method
+
+* `.aggregate(:access_count)`
+* `.aggregate(:user_agent)`
+* `.aggregate(:referer)`
+* `.aggregate(:country)`
+* `.aggregate(:unique_id)`
+
+Behind the scenes, this method will take all documents returned by your criteria and combines the values of the specified field (in case of `:access_count` it is simple sum of the values, in other cases it is sum of deeply nested hashes).
+
+### Examples
 
 The total number of views within a specific month can be accessed like this:
 
@@ -112,6 +148,10 @@ The total number of views per scope per specific date like this:
 ```Ruby
 Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').access_count
 ```
+
+## Credits
+
+Based on the approach described by John Nunemaker [here](http://www.railstips.org/blog/archives/2011/06/28/counters-everywhere/) and [here](http://www.railstips.org/blog/archives/2011/07/31/counters-everywhere-part-2/).
 
 ## Contributing
 
