@@ -96,9 +96,9 @@ Logs access count by country code 2:
 { "CZ" => 100, "DE" => 1 }
 ```
 
-You might want to use for example the [countries gem](https://github.com/hexorx/countries) to infer country names etc.
+Uses the [GeoIP](https://github.com/cjheath/geoip) library to infer country_code from IP address.
 
-This will use the [GeoIP](https://github.com/cjheath/geoip) library to log country.
+You might can use for example the [countries gem](https://github.com/hexorx/countries) to convert the country code to country name etc.
 
 #### Unique id:
 
