@@ -137,31 +137,25 @@ Behind the scenes, this method will take all documents returned by your criteria
 
 ### Examples
 
-When combined you can scope your queries by time:
+Typically you first query by time:
 
 ```Ruby
 Mongoid::TrafficLog.for_date(Date.today)
 ```
 
-And scope:
+And eventually by scope:
 
 ```Ruby
 Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123')
 ```
 
-And retrieve aggregated access count:
+Followed by an aggregation. For example on access count:
 
 ```Ruby
 Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').aggregate_on(:access_count)
 ```
 
-Or access count by country:
-
-```Ruby
-Mongoid::TrafficLog.for_date(Date.today).for_scope('/pages/123').aggregate_on(:country)
-```
-
-The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For exmaple should you want to query for all pages whose path starts with '/blog':
+The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For exmaple should you want to query for all pages that have path beginning with '/blog':
 
 ```Ruby
 Mongoid::TrafficLog.for_year(2014).for_month(8).for_scope(/\A\/blog/).aggregate_on(:country)
