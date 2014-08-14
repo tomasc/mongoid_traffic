@@ -178,11 +178,17 @@ To narrow down by scope:
 
 * `.aggregate_on(:access_count)`
 * `.aggregate_on(:browsers)`
-* `.aggregate_on(:referer)`
-* `.aggregate_on(:country)`
-* `.aggregate_on(:unique_id)`
+* `.aggregate_on(:referers)`
+* `.aggregate_on(:countries)`
+* `.aggregate_on(:unique_ids)`
 
 Behind the scenes, this method will take all documents returned by your criteria and combines the values of the specified field (in case of `:access_count` it is simple sum of the values, in other cases it is sum of nested hashes).
+
+### Unique visits
+
+Lastly, to retrieve the number of unique visits:
+
+* `.sum(:unique_ids)`
 
 ### Examples
 

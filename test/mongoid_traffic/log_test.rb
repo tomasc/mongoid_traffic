@@ -10,26 +10,25 @@ module MongoidTraffic
       it 'has :scope' do
         subject.must_respond_to :scope
       end
-
       it 'has :access_count' do
         subject.must_respond_to :access_count
       end
-
       it 'has :browsers' do
         subject.must_respond_to :browsers
         subject.browsers.must_be_kind_of Hash
       end
-
       it 'has :referers' do
         subject.must_respond_to :referers
         subject.referers.must_be_kind_of Hash
       end
-
       it 'has :countries' do
         subject.must_respond_to :countries
         subject.countries.must_be_kind_of Hash
       end
-
+      it 'has :unique_ids' do
+        subject.must_respond_to :unique_ids
+        subject.unique_ids.must_be_kind_of Hash
+      end
       it 'has :updated_at' do
         subject.must_respond_to :updated_at
       end
@@ -102,6 +101,50 @@ module MongoidTraffic
               "IE" => { "10" => 1 } 
             }
           })
+        end
+      end
+
+      describe '.aggregate_on(:referers)' do
+        before do
+          log_1.tap{ |l| l.referers = { 'google' => 100, 'apple' => 1000 } }.save
+          log_2.tap{ |l| l.referers = { 'google' => 10, 'apple' => 100, 'ms' => 1 } }.save
+        end
+
+        it 'sums the referers' do
+          Log.aggregate_on(:referers).must_equal({ 'google' => 110, 'apple' => 1100, 'ms' => 1 })
+        end
+      end
+
+      describe '.aggregate_on(:countries)' do
+        before do
+          log_1.tap{ |l| l.countries = { 'CZ' => 100 } }.save
+          log_2.tap{ |l| l.countries = { 'DE' => 10 } }.save
+        end
+
+        it 'sums the countries' do
+          Log.aggregate_on(:countries).must_equal({ 'CZ' => 100, 'DE' => 10 })
+        end
+      end
+
+      describe '.aggregate_on(:unique_ids)' do
+        before do
+          log_1.tap{ |l| l.unique_ids = { '01234' => 100, '56789' => 100 } }.save
+          log_2.tap{ |l| l.unique_ids = { '56789' => 100 } }.save
+        end
+
+        it 'sums the unique_ids' do
+          Log.aggregate_on(:unique_ids).must_equal({ '01234' => 100, '56789' => 200 })
+        end
+      end
+
+      describe '.sum(:unique_ids)' do
+        before do
+          log_1.tap{ |l| l.unique_ids = { '01234' => 100, '56789' => 100 } }.save
+          log_2.tap{ |l| l.unique_ids = { '56789' => 100, 'ABCDE' => 1 } }.save
+        end
+
+        it 'sums the unique_ids' do
+          Log.sum(:unique_ids).must_equal 3
         end
       end
     end

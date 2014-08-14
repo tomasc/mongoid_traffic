@@ -8,9 +8,11 @@ module MongoidTraffic
     field :s, as: :scope, type: String
 
     field :ac, as: :access_count, type: Integer
+
     field :b, as: :browsers, type: Hash, default: {}
     field :c, as: :countries, type: Hash, default: {}
     field :r, as: :referers, type: Hash, default: {}
+    field :u, as: :unique_ids, type: Hash, default: {}
 
     field :uat, as: :updated_at, type: Time
 
@@ -46,6 +48,13 @@ module MongoidTraffic
       end
     end
 
+    def self.sum att
+      if att.to_sym == :unique_ids
+        aggregate_on(:unique_ids).keys.count
+      else
+        super(att)
+      end
+    end
 
     private # =============================================================
     
@@ -55,8 +64,7 @@ module MongoidTraffic
     end
 
     def self.sum_hash field_name
-      res = {}
-      self.pluck(field_name).each do |h|
+      self.pluck(field_name).inject({}) do |res, h|
         merger = proc { |key, v1, v2| 
           if Hash === v1 && Hash === v2
             v1.merge(v2, &merger)
@@ -68,7 +76,6 @@ module MongoidTraffic
         }
         res = res.merge(h, &merger)
       end
-      res
     end
 
   end
