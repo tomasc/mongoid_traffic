@@ -44,9 +44,7 @@ By default, the `.log` method creates/updates a document with aggregations for m
 MongoidTraffic::Logger.log(time_scope: %i(month week day))
 ```
 
-The available options are: `%(year month week day hour)`
-
-Your application might display daily stats for the last month, and then only aggregations per the previous months. In that case, you might want to regularly purge the no longer needed daily logs.
+The available options are: `%(year month week day)`
 
 #### Scope:
 
@@ -54,11 +52,21 @@ Your application might display daily stats for the last month, and then only agg
 MongoidTraffic::Logger.log(scope: '/pages/123')
 ```
 
+Allows to create several logs for different scopes of your application (typically URLs).
+
 #### User-Agent:
 
 ```Ruby
 MongoidTraffic::Logger.log(user_agent: user_agent_string)
 ```
+
+Logs platform-browser-version access count:
+
+```Ruby
+{ "Macintosh" => { "Safari" => { "8%2E0" => 1, "7%2E1" => 2 } } }
+```
+
+Please note the keys are escaped. You might want to unescape them using for example `CGI::unescape`.
 
 #### Referer:
 
@@ -66,7 +74,15 @@ MongoidTraffic::Logger.log(user_agent: user_agent_string)
 MongoidTraffic::Logger.log(referer: http_referer_string)
 ```
 
-(If the referer is included in the [bot list](http://www.user-agents.org/allagents.xml) the log will not be created.)
+Logs referer access count:
+
+```Ruby
+{ "http%3A%2F%2Fwww%2Egoogle%2Ecom" => 1 }
+```
+
+Please note the keys are escaped. You might want to unescape them using for example `CGI::unescape`.
+
+If the referer is included in the [bot list](http://www.user-agents.org/allagents.xml) the log will not be created.
 
 #### Country (via IP address):
 
@@ -74,12 +90,26 @@ MongoidTraffic::Logger.log(referer: http_referer_string)
 MongoidTraffic::Logger.log(ip_address: '123.123.123.123')
 ```
 
+Logs access count by country code 2:
+
+```Ruby
+{ "CZ" => 100, "DE" => 1 }
+```
+
+You might want to use for example the [countries gem](https://github.com/hexorx/countries) to infer country names etc.
+
 This will use the [GeoIP](https://github.com/cjheath/geoip) library to log country.
 
 #### Unique id:
 
 ```Ruby
 MongoidTraffic::Logger.log(unique_id: unique_id_string)
+```
+
+Logs access count by id:
+
+```Ruby
+{ "127.0.0.1" => 100, "88.198.50.152" => 1 }
 ```
 
 Typically you would pass it something like `session_id` to track unique visitors.

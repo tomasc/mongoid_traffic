@@ -16,13 +16,13 @@ module MongoidTraffic
 
     describe 'ClassMethods' do
       describe '.log' do
-
         before do 
           Logger.log(user_agent: user_agent_string, referer: referer, ip_address: ip_address)
           Logger.log(scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address)
         end
 
         it 'logs for month' do
+          p Log.monthly(month, year).first
           Log.monthly(month, year).count.must_equal 1
         end
         it 'logs for date' do
@@ -53,7 +53,6 @@ module MongoidTraffic
             Log.unscoped.wont_be :exists?
           end
         end
-        
       end
     end
 
