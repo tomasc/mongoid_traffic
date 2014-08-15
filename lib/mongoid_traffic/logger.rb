@@ -1,4 +1,3 @@
-require 'geoip'
 require 'uri'
 require 'useragent'
 

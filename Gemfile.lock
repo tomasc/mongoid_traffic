@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    mongoid_traffic (0.0.1)
+    mongoid_traffic (0.0.2)
       geoip
       mongoid (~> 4.0)
       nokogiri

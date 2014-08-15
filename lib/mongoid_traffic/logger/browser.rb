@@ -1,3 +1,5 @@
+require 'user_agent'
+
 module MongoidTraffic
   class Logger
     class Browser
