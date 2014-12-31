@@ -98,7 +98,7 @@ Logs access count by country code 2:
 
 Uses the [GeoIP](https://github.com/cjheath/geoip) library to infer country_code from IP address.
 
-You might can use for example the [countries gem](https://github.com/hexorx/countries) to convert the country code to country name etc.
+You can use the [countries gem](https://github.com/hexorx/countries) to convert the country code to country name etc.
 
 #### Unique id:
 
