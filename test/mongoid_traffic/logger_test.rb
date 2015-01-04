@@ -18,42 +18,42 @@ module MongoidTraffic
     describe 'ClassMethods' do
       describe '.log' do
         before do 
-          Logger.log(user_agent: user_agent_string, referer: referer, ip_address: ip_address, unique_id: unique_id)
-          Logger.log(scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address, unique_id: unique_id)
+          MongoidTraffic::Logger.log(::MyLog, user_agent: user_agent_string, referer: referer, ip_address: ip_address, unique_id: unique_id)
+          MongoidTraffic::Logger.log(::MyLog, scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address, unique_id: unique_id)
         end
 
         it 'logs for month' do
-          Log.monthly(month, year).count.must_equal 1
+          ::MyLog.monthly(month, year).count.must_equal 1
         end
         it 'logs for date' do
-          Log.daily(date).count.must_equal 1
+          ::MyLog.daily(date).count.must_equal 1
         end
         it 'logs for scope' do
-          Log.scoped_to(scope).count.must_equal 2
+          ::MyLog.scoped_to(scope).count.must_equal 2
         end
         it 'logs access_count' do
-          Log.first.access_count.must_equal 1
+          ::MyLog.first.access_count.must_equal 1
         end
         it 'logs user_agent' do
-          Log.first.browsers.fetch('Macintosh').fetch('Safari').fetch('8%2E0').must_equal 1
+          ::MyLog.first.browsers.fetch('Macintosh').fetch('Safari').fetch('8%2E0').must_equal 1
         end
         it 'logs referer' do
-          Log.first.referers.fetch('http%3A%2F%2Fwww%2Egoogle%2Ecom').must_equal 1
+          ::MyLog.first.referers.fetch('http%3A%2F%2Fwww%2Egoogle%2Ecom').must_equal 1
         end
         it 'logs country' do
-          Log.first.countries.fetch('DE').must_equal 1
+          ::MyLog.first.countries.fetch('DE').must_equal 1
         end
         it 'logs unique_id' do
-          Log.first.unique_ids.fetch('ABC').must_equal 1
+          ::MyLog.first.unique_ids.fetch('ABC').must_equal 1
         end
         it 'logs updated_at' do
-          Log.first.updated_at.must_be :present?
+          ::MyLog.first.updated_at.must_be :present?
         end
 
         describe 'when referer a bot' do
           let(:referer) { 'Googlebot/Test ( http://www.googlebot.com/bot.html)' }
           it 'does not create log' do
-            Log.exists?.must_equal false
+            ::MyLog.exists?.must_equal false
           end
         end
       end

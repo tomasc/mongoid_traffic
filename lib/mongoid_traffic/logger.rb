@@ -14,13 +14,14 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
     
-    def self.log *args
-      new(*args).log
+    def self.log log_cls, *args
+      new(log_cls, *args).log
     end
 
     # ---------------------------------------------------------------------
 
-    def initialize ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), unique_id: nil, user_agent: nil 
+    def initialize log_cls, ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), unique_id: nil, user_agent: nil 
+      @log_cls = log_cls
       @ip_address = ip_address
       @referer_string = referer
       @scope = scope
@@ -34,7 +35,7 @@ module MongoidTraffic
       raise "Invalid time scope definition: #{@time_scope}" unless @time_scope.all?{ |ts| TIME_SCOPE_OPTIONS.include?(ts) }
 
       @time_scope.each do |ts|
-        Log.collection.find( find_query(ts) ).upsert( upsert_query )
+        @log_cls.collection.find( find_query(ts) ).upsert( upsert_query )
       end
     end
 

@@ -8,7 +8,7 @@ Aggregated traffic logs stored in MongoDB. Fast and efficient logging via atomic
 
 Add this line to your application's Gemfile:
 
-```Ruby
+```ruby
 gem 'mongoid_traffic'
 ```
 
@@ -26,13 +26,28 @@ $ gem install mongoid_traffic
 
 ## Usage
 
-Log your traffic like this:
+Setup your class for storing the log:
 
-```Ruby
-MongoidTraffic::Logger.log
+```ruby
+class MyLog
+	include Mongoid::Document
+	include MongoidTraffic::Log
+end
 ```
 
-This will (by default) create two `MongoidTraffic::Log` documents: first with `:df(date_from)` and `:dt(date_to)` fields specifying monthly log, second with dates specifying daily log. Each log has an `:access_count` attribute that is incremented with subsequent `.log` calls.
+Log your traffic like this:
+
+```ruby
+MongoidTraffic::Logger.log(MyLog, *args)
+```
+
+Or, if you prefer, directly on the `MyLog` class:
+
+```ruby
+MyLog.log(*args)
+```
+
+This will (by default) create two `MyLog` documents: first with `:df(date_from)` and `:dt(date_to)` fields specifying monthly log, second with dates specifying daily log. Each log has an `:access_count` attribute that is incremented with subsequent `.log` calls.
 
 ### Optional arguments
 
@@ -40,29 +55,29 @@ This will (by default) create two `MongoidTraffic::Log` documents: first with `:
 
 By default, the `.log` method creates/updates a document with aggregations for month and a document with aggregations for a day. You can however customize this behaviour like this:
 
-```Ruby
-MongoidTraffic::Logger.log(time_scope: %i(month week day))
+```ruby
+MyLog.log(time_scope: %i(month week day))
 ```
 
 The available options are: `%(year month week day)`
 
 #### Scope:
 
-```Ruby
-MongoidTraffic::Logger.log(scope: '/pages/123')
+```ruby
+MyLog.log(scope: '/pages/123')
 ```
 
 Allows to create several logs for different scopes of your application (typically URLs).
 
 #### User-Agent:
 
-```Ruby
-MongoidTraffic::Logger.log(user_agent: user_agent_string)
+```ruby
+MyLog.log(user_agent: user_agent_string)
 ```
 
 Logs platform-browser-version access count:
 
-```Ruby
+```ruby
 { "Macintosh" => { "Safari" => { "8%2E0" => 1, "7%2E1" => 2 } } }
 ```
 
@@ -70,13 +85,13 @@ Please note the keys are escaped. You might want to unescape them using for exam
 
 #### Referer:
 
-```Ruby
-MongoidTraffic::Logger.log(referer: http_referer_string)
+```ruby
+MyLog.log(referer: http_referer_string)
 ```
 
 Logs referer access count:
 
-```Ruby
+```ruby
 { "http%3A%2F%2Fwww%2Egoogle%2Ecom" => 1 }
 ```
 
@@ -86,13 +101,13 @@ If the referer is included in the [bot list](http://www.user-agents.org/allagent
 
 #### Country (via IP address):
 
-```Ruby
-MongoidTraffic::Logger.log(ip_address: '123.123.123.123')
+```ruby
+MyLog.log(ip_address: '123.123.123.123')
 ```
 
 Logs access count by country code 2:
 
-```Ruby
+```ruby
 { "CZ" => 100, "DE" => 1 }
 ```
 
@@ -102,13 +117,13 @@ You can use the [countries gem](https://github.com/hexorx/countries) to convert 
 
 #### Unique id:
 
-```Ruby
-MongoidTraffic::Logger.log(unique_id: unique_id_string)
+```ruby
+MyLog.log(unique_id: unique_id_string)
 ```
 
 Logs access count by id:
 
-```Ruby
+```ruby
 { "0123456789" => 100, "ABCDEFGHIJ" => 1 }
 ```
 
@@ -118,9 +133,9 @@ Typically you would pass it something like `session_id` to track unique visitors
 
 In case of Rails, you can use the `.after_action` macro with the `#log_traffic` helper method in your controllers:
 
-```Ruby
+```ruby
 class MyController < ApplicationController
-	after_action :log_traffic, only: [:show]
+	after_action -> { log_traffic(MyLog) }, only: [:show]
 end
 ```
 
@@ -128,32 +143,26 @@ The method automatically infers most of the options from the controller `request
 
 Additionally the `:log_scoped_traffic` method adds a scope by the current request path (`/pages/123`):
 
-```Ruby
+```ruby
 class MyController < ApplicationController
-	after_action :log_scoped_traffic, only: [:show]
+	after_action -> { log_scoped_traffic(MyLog) }, only: [:show]
 end
 ```
 
 You can override this behavior with custom scope like this:
 
-```Ruby
+```ruby
 class MyController < ApplicationController
-	after_action :log_scoped_traffic, only: [:show]
-
-	private
-	
-	def log_scoped_traffic
-		super scope: 'my-scope-comes-here'
-	end
+	after_action -> { log_scoped_traffic(MyLog, scope: 'my-scope-comes-here') }, only: [:show]
 end
 ```
 
 It might be good idea to use both methods in order to log access to the whole site as well as access to individual pages:
 
-```Ruby
+```ruby
 class MyController < ApplicationController
-	after_action :log_traffic, only: [:show]
-	after_action :log_scoped_traffic, only: [:show]
+	after_action -> { log_traffic(MyLog) }, only: [:show]
+	after_action -> { log_scoped_traffic(MyLog) }, only: [:show]
 end
 ```
 
@@ -194,26 +203,26 @@ Lastly, to retrieve the number of unique visits:
 
 Typically you first query by time:
 
-```Ruby
-Mongoid::TrafficLog.daily(Date.today)
+```ruby
+MyLog.daily(Date.today)
 ```
 
 And eventually by scope:
 
-```Ruby
-Mongoid::TrafficLog.daily(Date.today).scoped_to('/pages/123')
+```ruby
+MyLog.daily(Date.today).scoped_to('/pages/123')
 ```
 
 Followed by an aggregation. For example on access count:
 
-```Ruby
-Mongoid::TrafficLog.daily(Date.today).scoped_to('/pages/123').aggregate_on(:access_count)
+```ruby
+MyLog.daily(Date.today).scoped_to('/pages/123').aggregate_on(:access_count)
 ```
 
 The scope query accepts regular expressions, which allows for aggregations on specific parts of your site. For example should you want to query for all pages that have path beginning with '/blog':
 
-```Ruby
-Mongoid::TrafficLog.monthly(8, 2014).scoped_to(/\A\/blog/).aggregate_on(:countries)
+```ruby
+MyLog.monthly(8, 2014).scoped_to(/\A\/blog/).aggregate_on(:countries)
 ```
 
 ## TODO

@@ -1,8 +1,9 @@
 module MongoidTraffic
   module ControllerAdditions
 
-    def log_traffic scope: nil
+    def log_traffic log_cls, scope: nil
       MongoidTraffic::Logger.log(
+        log_cls,
         ip_address: request.remote_ip,
         referer: request.headers['Referer'],
         unique_id: request.session_options[:id], # FIXME: not sure about this
@@ -10,7 +11,7 @@ module MongoidTraffic
       )
     end
     
-    def log_scoped_traffic scope: nil
+    def log_scoped_traffic log_cls, scope: nil
       log_traffic(scope: (scope || request.fullpath.split('?').first))
     end
 

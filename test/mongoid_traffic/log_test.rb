@@ -4,7 +4,7 @@ require_relative '../../lib/mongoid_traffic/log'
 
 module MongoidTraffic
   describe 'Log' do
-    subject { Log.new }
+    subject { MyLog.new }
 
     describe 'fields' do
       it 'has :scope' do
@@ -36,20 +36,20 @@ module MongoidTraffic
 
     describe 'scopes' do
       it 'has :default_scope that assumes no :scope' do
-        Log.criteria.selector.fetch('s').must_be_nil
+        MyLog.criteria.selector.fetch('s').must_be_nil
       end
 
-      it('has :for_dates') { Log.must_respond_to :for_dates }
-      it('has :yearly') { Log.must_respond_to :yearly }
-      it('has :monthly') { Log.must_respond_to :monthly }
-      it('has :weekly') { Log.must_respond_to :weekly }
-      it('has :daily') { Log.must_respond_to :daily }
-      it('has :scoped_to') { Log.must_respond_to :scoped_to }
+      it('has :for_dates') { MyLog.must_respond_to :for_dates }
+      it('has :yearly') { MyLog.must_respond_to :yearly }
+      it('has :monthly') { MyLog.must_respond_to :monthly }
+      it('has :weekly') { MyLog.must_respond_to :weekly }
+      it('has :daily') { MyLog.must_respond_to :daily }
+      it('has :scoped_to') { MyLog.must_respond_to :scoped_to }
     end
 
     describe '.aggregate_on' do
-      let(:log_1) { Log.new(date_from: Date.today, date_to: Date.today) }
-      let(:log_2) { Log.new(date_from: Date.tomorrow, date_to: Date.tomorrow) }
+      let(:log_1) { MyLog.new(date_from: Date.today, date_to: Date.today) }
+      let(:log_2) { MyLog.new(date_from: Date.tomorrow, date_to: Date.tomorrow) }
       
       describe '.aggregate_on(:access_count)' do
         before do
@@ -58,7 +58,7 @@ module MongoidTraffic
         end
 
         it 'sums the access_counts' do
-          Log.aggregate_on(:access_count).must_equal 3
+          MyLog.aggregate_on(:access_count).must_equal 3
         end
       end
 
@@ -91,7 +91,7 @@ module MongoidTraffic
         end
 
         it 'sums the browsers' do
-          Log.aggregate_on(:browsers).must_equal({
+          MyLog.aggregate_on(:browsers).must_equal({
             "Mac" => { 
               "Saf" => { "8" => 11, "7" => 100 }, 
               "Chr" => { "3" => 5 } 
@@ -111,7 +111,7 @@ module MongoidTraffic
         end
 
         it 'sums the referers' do
-          Log.aggregate_on(:referers).must_equal({ 'google' => 110, 'apple' => 1100, 'ms' => 1 })
+          MyLog.aggregate_on(:referers).must_equal({ 'google' => 110, 'apple' => 1100, 'ms' => 1 })
         end
       end
 
@@ -122,7 +122,7 @@ module MongoidTraffic
         end
 
         it 'sums the countries' do
-          Log.aggregate_on(:countries).must_equal({ 'CZ' => 100, 'DE' => 10 })
+          MyLog.aggregate_on(:countries).must_equal({ 'CZ' => 100, 'DE' => 10 })
         end
       end
 
@@ -133,7 +133,7 @@ module MongoidTraffic
         end
 
         it 'sums the unique_ids' do
-          Log.aggregate_on(:unique_ids).must_equal({ '01234' => 100, '56789' => 200 })
+          MyLog.aggregate_on(:unique_ids).must_equal({ '01234' => 100, '56789' => 200 })
         end
       end
 
@@ -144,7 +144,7 @@ module MongoidTraffic
         end
 
         it 'sums the unique_ids' do
-          Log.sum(:unique_ids).must_equal 3
+          MyLog.sum(:unique_ids).must_equal 3
         end
       end
     end

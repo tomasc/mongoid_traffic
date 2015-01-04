@@ -41,3 +41,8 @@ class MiniTest::Spec
   before(:each) { DatabaseCleaner.start }
   after(:each) { DatabaseCleaner.clean }
 end
+
+class MyLog
+  include Mongoid::Document
+  include MongoidTraffic::Log
+end
