@@ -13,14 +13,14 @@ module MongoidTraffic
     TIME_SCOPE_OPTIONS = %i(year month week day)
 
     # ---------------------------------------------------------------------
-    
+
     def self.log log_cls, *args
       new(log_cls, *args).log
     end
 
     # ---------------------------------------------------------------------
 
-    def initialize log_cls, ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), unique_id: nil, user_agent: nil 
+    def initialize log_cls, ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), unique_id: nil, user_agent: nil
       @log_cls = log_cls
       @ip_address = ip_address
       @referer_string = referer
@@ -35,14 +35,14 @@ module MongoidTraffic
       raise "Invalid time scope definition: #{@time_scope}" unless @time_scope.all?{ |ts| TIME_SCOPE_OPTIONS.include?(ts) }
 
       @time_scope.each do |ts|
-        @log_cls.collection.find( find_query(ts) ).upsert( upsert_query )
+        @log_cls.collection.find( find_query(ts) ).update_many( upsert_query, upsert: true )
       end
     end
 
     # ---------------------------------------------------------------------
 
     def upsert_query
-      { 
+      {
         '$inc' => access_count_query.
           merge(browser_query).
           merge(country_query).
@@ -84,7 +84,7 @@ module MongoidTraffic
     end
 
     # ---------------------------------------------------------------------
-    
+
     def escape_key key
       CGI::escape(key).gsub('.', '%2E')
     end
@@ -110,7 +110,7 @@ module MongoidTraffic
     end
 
     private # =============================================================
-    
+
     def browser
       return unless @user_agent_string.present?
       @browser ||= Browser.new(@user_agent_string)
