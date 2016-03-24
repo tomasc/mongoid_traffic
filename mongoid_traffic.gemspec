@@ -19,9 +19,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "geoip"
-  spec.add_dependency "mongoid", "~> 5.0"
+  spec.add_dependency "mongoid", "~> 5.1"
   spec.add_dependency "nokogiri"
-  spec.add_dependency "useragent", "~> 0.10.0"
+  spec.add_dependency "useragent"
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "coveralls"
@@ -29,5 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "guard"
   spec.add_development_dependency "guard-minitest"
   spec.add_development_dependency "minitest"
+  spec.add_development_dependency "minitest-around"
   spec.add_development_dependency "rake"
 end
