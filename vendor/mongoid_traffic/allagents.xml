@@ -5077,15 +5077,6 @@
 <Link2></Link2>
 </user-agent>
 <user-agent>
-<ID>id_a_f_021206_1</ID>
-<String>Feedster Crawler/3.0; Feedster&#44; Inc.</String>
-<Description>Feedster RSS feed search</Description>
-<Type>R</Type>
-<Comment>64.95.116.x[x]</Comment>
-<Link1>http://www.feedster.com/</Link1>
-<Link2></Link2>
-</user-agent>
-<user-agent>
 <ID>id_a_f_040207_1</ID>
 <String>FeedZcollector v1.x (Platinum) http://www.feeds4all.com/feedzcollector</String>
 <Description>FeedZcollector - Feed (RSS&#44; ATOM and RDF) capturing software</Description>
@@ -19465,33 +19456,6 @@
 <Type>C</Type>
 <Comment>193.17.73.1xx</Comment>
 <Link1>http://www.topos.com.ua/</Link1>
-<Link2></Link2>
-</user-agent>
-<user-agent>
-<ID>id_t_z_1373</ID>
-<String>Toutatis x-xx.x (hoppa.com)</String>
-<Description>Hoppa robot (81.4.78.xxx)</Description>
-<Type>R</Type>
-<Comment></Comment>
-<Link1>http://hoppa.com/</Link1>
-<Link2></Link2>
-</user-agent>
-<user-agent>
-<ID>id_t_z_1374</ID>
-<String>Toutatis x.x (hoppa.com)</String>
-<Description>Hoppa robot (81.4.78.xxx)</Description>
-<Type>R</Type>
-<Comment></Comment>
-<Link1>http://hoppa.com/</Link1>
-<Link2></Link2>
-</user-agent>
-<user-agent>
-<ID>id_t_z_1375</ID>
-<String>Toutatis x.x-x</String>
-<Description>Hoppa robot (81.4.78.xxx)</Description>
-<Type>R</Type>
-<Comment></Comment>
-<Link1>http://hoppa.com/</Link1>
 <Link2></Link2>
 </user-agent>
 <user-agent>
