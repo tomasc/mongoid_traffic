@@ -6,7 +6,7 @@ module MongoidTraffic
   class Logger
     class Bots
       DATA_URL = 'http://www.user-agents.org/allagents.xml'.freeze
-      FILE_PATH = 'vendor/mongoid_traffic/allagents.xml'.freeze
+      FILE_PATH = File.join(File.dirname(__dir__), '..', '..', 'vendor', 'mongoid_traffic', 'allagents.xml')
 
       class << self
         def list
