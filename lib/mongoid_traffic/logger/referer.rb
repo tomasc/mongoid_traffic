@@ -3,8 +3,7 @@ require 'uri'
 module MongoidTraffic
   class Logger
     class Referer
-
-      def initialize referer_string
+      def initialize(referer_string)
         @referer_string = referer_string
       end
 
@@ -17,11 +16,10 @@ module MongoidTraffic
       end
 
       private # =============================================================
-      
+
       def uri
         URI.parse(@referer_string)
       end
-
     end
   end
 end

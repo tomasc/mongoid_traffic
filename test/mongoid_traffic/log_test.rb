@@ -50,11 +50,11 @@ module MongoidTraffic
     describe '.aggregate_on' do
       let(:log_1) { MyLog.new(date_from: Date.today, date_to: Date.today) }
       let(:log_2) { MyLog.new(date_from: Date.tomorrow, date_to: Date.tomorrow) }
-      
+
       describe '.aggregate_on(:access_count)' do
         before do
-          log_1.tap{ |l| l.access_count = 1 }.save
-          log_2.tap{ |l| l.access_count = 2 }.save
+          log_1.tap { |l| l.access_count = 1 }.save
+          log_2.tap { |l| l.access_count = 2 }.save
         end
 
         it 'sums the access_counts' do
@@ -65,82 +65,80 @@ module MongoidTraffic
       describe '.aggregate_on(:browsers)' do
         # not the key names have been abbreviated
         before do
-          log_1.tap do |l| 
+          log_1.tap do |l|
             l.browsers = {
-              "Mac" => {
-                "Saf" => { "8" => 1 } 
-              }, 
-              "Win" => { 
-                "Saf" => { "7" => 5 } 
+              'Mac' => {
+                'Saf' => { '8' => 1 }
+              },
+              'Win' => {
+                'Saf' => { '7' => 5 }
               }
             }
           end.save
-          
-          log_2.tap do |l| 
-            l.browsers = { 
-              "Mac" => { 
-                "Saf" => { "8" => 10, "7" => 100 }, 
-                "Chr" => { "3" => 5 } 
-              }, 
-              "Win" => { 
-                "Saf" => { "7" => 100 }, 
-                "IE" => { "10" => 1 } 
-              } 
+
+          log_2.tap do |l|
+            l.browsers = {
+              'Mac' => {
+                'Saf' => { '8' => 10, '7' => 100 },
+                'Chr' => { '3' => 5 }
+              },
+              'Win' => {
+                'Saf' => { '7' => 100 },
+                'IE' => { '10' => 1 }
+              }
             }
           end.save
         end
 
         it 'sums the browsers' do
-          MyLog.aggregate_on(:browsers).must_equal({
-            "Mac" => { 
-              "Saf" => { "8" => 11, "7" => 100 }, 
-              "Chr" => { "3" => 5 } 
-            }, 
-            "Win" => { 
-              "Saf" => { "7" => 105 }, 
-              "IE" => { "10" => 1 } 
-            }
-          })
+          MyLog.aggregate_on(:browsers).must_equal('Mac' => {
+                                                     'Saf' => { '8' => 11, '7' => 100 },
+                                                     'Chr' => { '3' => 5 }
+                                                   },
+                                                   'Win' => {
+                                                     'Saf' => { '7' => 105 },
+                                                     'IE' => { '10' => 1 }
+                                                   })
         end
       end
 
       describe '.aggregate_on(:referers)' do
         before do
-          log_1.tap{ |l| l.referers = { 'google' => 100, 'apple' => 1000 } }.save
-          log_2.tap{ |l| l.referers = { 'google' => 10, 'apple' => 100, 'ms' => 1 } }.save
+          log_1.tap { |l| l.referers = { 'google' => 100, 'apple' => 1000 } }.save
+          log_2.tap { |l| l.referers = { 'google' => 10, 'apple' => 100, 'ms' => 1 } }.save
         end
 
         it 'sums the referers' do
-          MyLog.aggregate_on(:referers).must_equal({ 'google' => 110, 'apple' => 1100, 'ms' => 1 })
+          MyLog.aggregate_on(:referers).must_equal('google' => 110, 'apple' => 1100, 'ms' => 1)
         end
       end
 
       describe '.aggregate_on(:countries)' do
         before do
-          log_1.tap{ |l| l.countries = { 'CZ' => 100 } }.save
-          log_2.tap{ |l| l.countries = { 'DE' => 10 } }.save
+          log_1.tap { |l| l.countries = { 'CZ' => 100 } }.save
+          log_2.tap { |l| l.countries = { 'DE' => 10 } }.save
         end
 
         it 'sums the countries' do
-          MyLog.aggregate_on(:countries).must_equal({ 'CZ' => 100, 'DE' => 10 })
+          MyLog.aggregate_on(:countries).must_equal('CZ' => 100, 'DE' => 10)
         end
       end
 
       describe '.aggregate_on(:unique_ids)' do
         before do
-          log_1.tap{ |l| l.unique_ids = { '01234' => 100, '56789' => 100 } }.save
-          log_2.tap{ |l| l.unique_ids = { '56789' => 100 } }.save
+          log_1.tap { |l| l.unique_ids = { '01234' => 100, '56789' => 100 } }.save
+          log_2.tap { |l| l.unique_ids = { '56789' => 100 } }.save
         end
 
         it 'sums the unique_ids' do
-          MyLog.aggregate_on(:unique_ids).must_equal({ '01234' => 100, '56789' => 200 })
+          MyLog.aggregate_on(:unique_ids).must_equal('01234' => 100, '56789' => 200)
         end
       end
 
       describe '.sum(:unique_ids)' do
         before do
-          log_1.tap{ |l| l.unique_ids = { '01234' => 100, '56789' => 100 } }.save
-          log_2.tap{ |l| l.unique_ids = { '56789' => 100, 'ABCDE' => 1 } }.save
+          log_1.tap { |l| l.unique_ids = { '01234' => 100, '56789' => 100 } }.save
+          log_2.tap { |l| l.unique_ids = { '56789' => 100, 'ABCDE' => 1 } }.save
         end
 
         it 'sums the unique_ids' do
@@ -148,6 +146,5 @@ module MongoidTraffic
         end
       end
     end
-
   end
 end

@@ -9,18 +9,17 @@ require_relative './logger/referer'
 
 module MongoidTraffic
   class Logger
-
-    TIME_SCOPE_OPTIONS = %i(year month week day)
+    TIME_SCOPE_OPTIONS = %i(year month week day).freeze
 
     # ---------------------------------------------------------------------
 
-    def self.log log_cls, *args
+    def self.log(log_cls, *args)
       new(log_cls, *args).log
     end
 
     # ---------------------------------------------------------------------
 
-    def initialize log_cls, ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), unique_id: nil, user_agent: nil
+    def initialize(log_cls, ip_address: nil, referer: nil, scope: nil, time_scope: %i(month day), unique_id: nil, user_agent: nil)
       @log_cls = log_cls
       @ip_address = ip_address
       @referer_string = referer
@@ -32,10 +31,10 @@ module MongoidTraffic
 
     def log
       return if Bots.is_a_bot?(@referer_string)
-      raise "Invalid time scope definition: #{@time_scope}" unless @time_scope.all?{ |ts| TIME_SCOPE_OPTIONS.include?(ts) }
+      raise "Invalid time scope definition: #{@time_scope}" unless @time_scope.all? { |ts| TIME_SCOPE_OPTIONS.include?(ts) }
 
       @time_scope.each do |ts|
-        @log_cls.collection.find( find_query(ts) ).update_many( upsert_query, upsert: true )
+        @log_cls.collection.find(find_query(ts)).update_many(upsert_query, upsert: true)
       end
     end
 
@@ -43,11 +42,11 @@ module MongoidTraffic
 
     def upsert_query
       {
-        '$inc' => access_count_query.
-          merge(browser_query).
-          merge(country_query).
-          merge(referer_query).
-          merge(unique_id_query),
+        '$inc' => access_count_query
+          .merge(browser_query)
+          .merge(country_query)
+          .merge(referer_query)
+          .merge(unique_id_query),
         '$set' => { uat: Time.now }
       }
     end
@@ -60,7 +59,7 @@ module MongoidTraffic
 
     def browser_query
       return {} unless browser.present?
-      browser_path = [browser.platform, browser.name, browser.version].map{ |s| escape_key(s) }.join('.')
+      browser_path = [browser.platform, browser.name, browser.version].map { |s| escape_key(s) }.join('.')
       { "b.#{browser_path}" => 1 }
     end
 
@@ -85,13 +84,13 @@ module MongoidTraffic
 
     # ---------------------------------------------------------------------
 
-    def escape_key key
-      CGI::escape(key).gsub('.', '%2E')
+    def escape_key(key)
+      CGI.escape(key).gsub('.', '%2E')
     end
 
     # ---------------------------------------------------------------------
 
-    def find_query ts
+    def find_query(ts)
       res = time_query(ts)
       res = res.merge(scope_query) if @scope.present?
       res
@@ -101,7 +100,7 @@ module MongoidTraffic
       { s: @scope }
     end
 
-    def time_query ts
+    def time_query(ts)
       date = Date.today
       case ts
       when :day then { df: date, dt: date }
@@ -120,6 +119,5 @@ module MongoidTraffic
       return unless @referer_string.present?
       @referer ||= Referer.new(@referer_string)
     end
-
   end
 end

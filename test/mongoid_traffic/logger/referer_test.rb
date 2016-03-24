@@ -5,7 +5,6 @@ require_relative '../../../lib/mongoid_traffic/logger/referer'
 module MongoidTraffic
   class Logger
     describe 'Referer' do
-
       let(:referer_string) { 'http://www.google.com:80/path/to?foo=bar' }
       subject { Referer.new(referer_string) }
 
@@ -24,7 +23,6 @@ module MongoidTraffic
       it 'strips query params' do
         subject.host.wont_include '?foo=bar'
       end
-
     end
   end
 end

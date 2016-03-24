@@ -4,11 +4,10 @@ require_relative '../../lib/mongoid_traffic/controller_additions'
 
 module MongoidTraffic
   describe 'ControllerAdditions' do
-
     before(:each) do
       @controller_class = Class.new
       @controller = @controller_class.new
-      def @controller_class.helper_method(name); end
+      def @controller_class.helper_method(_name); end
       @controller_class.send(:include, MongoidTraffic::ControllerAdditions)
     end
 
@@ -22,6 +21,5 @@ module MongoidTraffic
     describe '.log_scoped_traffic' do
       it 'infers scope from request path'
     end
-
   end
 end

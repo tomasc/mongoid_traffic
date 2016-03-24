@@ -17,7 +17,7 @@ module MongoidTraffic
 
     describe 'ClassMethods' do
       describe '.log' do
-        before do 
+        before do
           MongoidTraffic::Logger.log(::MyLog, user_agent: user_agent_string, referer: referer, ip_address: ip_address, unique_id: unique_id)
           MongoidTraffic::Logger.log(::MyLog, scope: scope, user_agent: user_agent_string, referer: referer, ip_address: ip_address, unique_id: unique_id)
         end
@@ -58,6 +58,5 @@ module MongoidTraffic
         end
       end
     end
-
   end
 end
