@@ -91,14 +91,7 @@ module MongoidTraffic
         end
 
         it 'sums the browsers' do
-          MyLog.aggregate_on(:browsers).must_equal('Mac' => {
-                                                     'Saf' => { '8' => 11, '7' => 100 },
-                                                     'Chr' => { '3' => 5 }
-                                                   },
-                                                   'Win' => {
-                                                     'Saf' => { '7' => 105 },
-                                                     'IE' => { '10' => 1 }
-                                                   })
+          MyLog.aggregate_on(:browsers).must_equal('Mac' => { 'Saf' => { '8' => 11, '7' => 100 }, 'Chr' => { '3' => 5 } }, 'Win' => { 'Saf' => { '7' => 105 }, 'IE' => { '10' => 1 } })
         end
       end
 
