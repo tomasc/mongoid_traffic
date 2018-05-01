@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'geoip'
-  spec.add_dependency 'mongoid'
+  spec.add_dependency 'mongoid', '>= 5', '<= 7'
   spec.add_dependency 'nokogiri'
   spec.add_dependency 'useragent'
 
