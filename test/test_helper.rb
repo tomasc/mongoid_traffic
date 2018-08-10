@@ -19,4 +19,7 @@ end
 class MyLog
   include Mongoid::Document
   include MongoidTraffic::Log
+
+  additional_counter :c, as: :country
+  additional_counter :b, as: :browser
 end
