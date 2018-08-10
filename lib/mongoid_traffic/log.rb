@@ -1,5 +1,3 @@
-require 'logger'
-
 module MongoidTraffic
   module Log
     def self.included(base)
@@ -51,14 +49,6 @@ module MongoidTraffic
       end
 
       private
-
-      # def sum(att)
-      #   if att.to_sym == :unique_ids
-      #     aggregate_on(:unique_ids).keys.count
-      #   else
-      #     super(att)
-      #   end
-      # end
 
       def find_field(name)
         fields.detect do |field_name, field|
