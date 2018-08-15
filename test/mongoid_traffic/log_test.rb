@@ -8,7 +8,6 @@ describe MongoidTraffic::Log do
     it { subject.must_respond_to :date_to }
     it { subject.must_respond_to :time_scope }
     it { subject.must_respond_to :access_count }
-    it { subject.must_respond_to :scope }
     it { subject.must_respond_to :updated_at }
   end
 
@@ -18,8 +17,6 @@ describe MongoidTraffic::Log do
     it { MyLog.must_respond_to :month }
     it { MyLog.must_respond_to :week }
     it { MyLog.must_respond_to :day }
-
-    it { MyLog.must_respond_to :scoped_to }
   end
 
   describe '.aggregate_on' do
@@ -38,17 +35,17 @@ describe MongoidTraffic::Log do
     end
 
     describe 'access_count across scopes' do
-      let(:scope_1) { 'ABC' }
-      let(:scope_2) { 'DEF' }
+      let(:my_scope_1) { 'ABC' }
+      let(:my_scope_2) { 'DEF' }
 
       before do
-        log_1.tap { |l| l.access_count = 1; l.scope = scope_1 }.save
-        log_2.tap { |l| l.access_count = 2; l.scope = scope_2 }.save
+        log_1.tap { |l| l.access_count = 1; l.my_scope = my_scope_1 }.save
+        log_2.tap { |l| l.access_count = 2; l.my_scope = my_scope_2 }.save
       end
 
       it { MyLog.aggregate_on(:access_count).must_equal 3 }
-      it { MyLog.scoped_to(scope_1).aggregate_on(:access_count).must_equal 1 }
-      it { MyLog.scoped_to(scope_2).aggregate_on(:access_count).must_equal 2 }
+      it { MyLog.with_my_scope(my_scope_1).aggregate_on(:access_count).must_equal 1 }
+      it { MyLog.with_my_scope(my_scope_2).aggregate_on(:access_count).must_equal 2 }
     end
 
     describe 'arbitrary counter' do

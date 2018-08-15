@@ -8,7 +8,6 @@ module MongoidTraffic
         field :ts, as: :time_scope, type: Integer
 
         field :ac, as: :access_count, type: Integer
-        field :s, as: :scope, type: String
         field :uat, as: :updated_at, type: Time
 
         validates :date_from, presence: true
@@ -19,15 +18,13 @@ module MongoidTraffic
         scope :weekly, -> { where(ts: TIME_SCOPE_OPTIONS[:year]) }
         scope :daily, -> { where(ts: TIME_SCOPE_OPTIONS[:day]) }
 
-        scope :for_dates, -> (date_from, date_to) { where(:date_from.lte => date_to, :date_to.gte => date_from) }
-        scope :year, -> (year) { yearly.for_dates(Date.parse("01/01/#{year}"), Date.parse("01/01/#{year}").at_end_of_year) }
-        scope :month, -> (month, year) { monthly.for_dates(Date.parse("01/#{month}/#{year}"), Date.parse("01/#{month}/#{year}").at_end_of_month) }
-        scope :week, -> (week, year) { weekly.for_dates(Date.commercial(year, week), Date.commercial(year, week).at_end_of_week) }
-        scope :day, -> (date) { daily.for_dates(date, date) }
+        scope :for_dates, ->(date_from, date_to) { where(:date_from.lte => date_to, :date_to.gte => date_from) }
+        scope :year, ->(year) { yearly.for_dates(Date.parse("01/01/#{year}"), Date.parse("01/01/#{year}").at_end_of_year) }
+        scope :month, ->(month, year) { monthly.for_dates(Date.parse("01/#{month}/#{year}"), Date.parse("01/#{month}/#{year}").at_end_of_month) }
+        scope :week, ->(week, year) { weekly.for_dates(Date.commercial(year, week), Date.commercial(year, week).at_end_of_week) }
+        scope :day, ->(date) { daily.for_dates(date, date) }
 
-        scope :scoped_to, -> (scope) { where(scope: scope) }
-
-        index(time_scope: 1, date_from: 1, date_to: 1, scope: 1)
+        index time_scope: 1, date_from: 1, date_to: 1
       end
     end
 
@@ -59,9 +56,8 @@ module MongoidTraffic
       def sum_hash(field_name)
         pluck(field_name).inject({}) do |res, h|
           merger = proc do |_, v1, v2|
-            case
-            when Hash === v1 && Hash === v2 then v1.merge(v2, &merger)
-            when Hash === v2 then v2
+            if Hash === v1 && Hash === v2 then v1.merge(v2, &merger)
+            elsif Hash === v2 then v2
             else v1.to_i + v2.to_i
             end
           end

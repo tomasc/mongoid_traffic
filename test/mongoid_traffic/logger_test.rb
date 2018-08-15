@@ -30,9 +30,9 @@ describe MongoidTraffic::Logger do
     describe 'with scope' do
       let(:scope) { 'my/path' }
 
-      before { MongoidTraffic::Logger.log(MyLog, scope: scope, time_scope: %i[day]) }
+      before { MyLog.with_my_scope(scope).log(time_scope: %i[day]) }
 
-      it { daily_log.scoped_to(scope).first.access_count.must_equal 1 }
+      it { daily_log.with_my_scope(scope).first.access_count.must_equal 1 }
     end
 
     describe 'with additional counters' do

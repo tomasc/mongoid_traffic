@@ -30,8 +30,8 @@ Setup your class for storing the log:
 
 ```ruby
 class MyLog
-	include Mongoid::Document
-	include MongoidTraffic::Log
+  include Mongoid::Document
+  include MongoidTraffic::Log
 end
 ```
 
@@ -63,17 +63,32 @@ The available options are: `%i[year month week day]`
 
 #### Scope:
 
-```ruby
-MyLog.log(scope: '/pages/123')
-MyLog.log(scope: '/pages/456')
-```
-
-Allows to create several logs for different scopes (for example URLs). Ie.
+It is possible to scope the log by an arbitrary number of parameters.
 
 ```ruby
-{ _id: …, df(date_from): …, dt(date_to): …, ac(access_count): 3, s(scope): '/pages/123' }
-{ _id: …, df(date_from): …, dt(date_to): …, ac(access_count): 1, s(scope): '/pages/456' }
+class MyLog
+  include Mongoid::Document
+  include MongoidTraffic::Log
+
+  belongs_to :page
+
+  scope :for_page, -> (page) { where(page: page) }
+end
 ```
+
+For example:
+
+```ruby
+MongoidTraffic::Logger.log(MyLog.for_page(page))
+```
+
+or
+
+```ruby
+MyLog.for_page(page).log(page: my_page)
+```
+
+PS If you query by a scope often do not forget to add corresponding indexes to your log model.
 
 #### Arbitrary counter:
 
@@ -83,10 +98,10 @@ First, specify the additional counter in the log model (prefer short aliased fie
 
 ```ruby
 class MyLog
-	include Mongoid::Document
-	include MongoidTraffic::Log
+  include Mongoid::Document
+  include MongoidTraffic::Log
 
-	additional_counter :c, as: :country
+  additional_counter :c, as: :country
 end
 ```
 
@@ -100,17 +115,17 @@ MyLog.log(country: 'NL')
 Which will create Hash with counts per country:
 
 ```ruby
-{ _id: …, df(date_from): …, dt(date_to): …, ac(access_count): 3, c(country): { 'CZ' => 1, 'NL' => 1 } }
+{ _id: …, df(date_from): …, dt(date_to): …, ac(access_count): 2, c(country): { 'CZ' => 1, 'NL' => 1 } }
 ```
 
 You can take advantage of the fact, that the underlying queries support dot-notation, and track on deeply nested hashes. For example, should you want to track access per browser:
 
 ```ruby
 class MyLog
-	include Mongoid::Document
-	include MongoidTraffic::Log
+  include Mongoid::Document
+  include MongoidTraffic::Log
 
-	additional_counter :b, as: :browser
+  additional_counter :b, as: :browser
 end
 ```
 
@@ -124,7 +139,7 @@ MyLog.log(browser: "Mac.Safari.7%2E1") # log access by Mac Safari 7.1
 Which will create following log document:
 
 ```ruby
-{ _id: …, df(date_from): …, dt(date_to): …, ac(access_count): 3, c(country): { 'Mac' => { 'Safari' => { '8' => 1, '7%2E1' => 1 } } } }
+{ _id: …, df(date_from): …, dt(date_to): …, ac(access_count): 2, b(browser): { 'Mac' => { 'Safari' => { '8' => 1, '7%2E1' => 1 } } } }
 ```
 
 Please note all `.` not intended to denote nesting need to be escaped (here as `%2E`).
@@ -169,7 +184,7 @@ Behind the scenes, this method will take all documents returned by your criteria
 MyLog.day(Date.today)
 ```
 
-Eventually by date range (when using the `.for_dates` scope please make sure to specify which log type you wish to access):
+Eventually by date range (when using the `.for_dates` scope make sure to specify which log type you wish to access):
 
 ```ruby
 MyLog.daily.for_dates(Date.yesterday, Date.today)
@@ -178,10 +193,10 @@ MyLog.daily.for_dates(Date.yesterday, Date.today)
 #### Scope
 
 ```ruby
-MyLog.day(Date.today).scoped_to('/pages/123')
+MyLog.for_page(page).day(Date.today)
 ```
 
-This order of scoping (date, scope) is important for performance reasons so that the queries take advantage of Mongoid collection index.
+Make sure that the order of drilling down corresponds to the indexes on your model.
 
 #### Aggregations
 
