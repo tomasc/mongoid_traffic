@@ -8,6 +8,7 @@
   * removed geo_ip
   * removed referer
   * removed rails controller additions
+  * removed scope
 
 ## 0.2.5
 
